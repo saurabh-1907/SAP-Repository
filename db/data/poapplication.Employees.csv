@@ -1,0 +1,11 @@
+employeeId,employeeName,salary,department,currencyCode,city,country,division_divisionId
+1,Rahul Sharma,75000,IT,INR,Bangalore,India,103
+2,Priya Verma,68000,HR,INR,Chennai,India,102
+3,John Smith,85000,Finance,USD,New York,USA,101
+4,Sarah Jones,72000,Marketing,GBP,London,UK,105
+5,Akash Gupta,90000,Technology,INR,Hyderabad,India,103
+6,Emily Brown,78000,Sales,SGD,Singapore,Singapore,104
+7,Michael Lee,69000,Operations,AUD,Sydney,Australia,106
+8,Sneha Reddy,81000,Research,EUR,Berlin,Germany,107
+9,David Wilson,76000,Legal,CAD,Toronto,Canada,108
+10,Karthik Raj,65000,Support,INR,Chennai,India,110
