@@ -6,42 +6,7 @@
 
 
 
-// aspect address {
-//     drno     : String(20);
-//     street   : nameStr;
-//     landmark : nameStr;
-//     city     : String(100);
-//     postal   : Integer;
-//     state    : String(100);
-//     country  : Country;
-//     region   : String(20);
-// }
 
-// aspect feeasp {
-//     gross_fee : Decimal(10,2);
-//     tax       : Decimal(10,2);
-//     total_fee : Decimal(10,2);
-//     currency  : Currency;
-// }
-
-
-// type Gender : String(20) enum {
-//     M = 'Male';
-//     F = 'Female';
-//     U = 'Undisclosed';
-// };
-
-// type AmountT : Decimal(10,2) @(
-//     Semantics.amount.currencyCode : 'CURRENCY_CODE',
-//     sap.unit : 'CURRENCY_CODE'
-// );
-
-// aspect FeeAspect {
-//     gross_fee : AmountT;
-//     tax       : AmountT;
-//     total_fee : AmountT;
-//     currency  : Currency;
-// }
 
 
 
