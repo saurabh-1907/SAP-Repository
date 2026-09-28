@@ -4,12 +4,6 @@
 
 // type nameStr : String(50);
 
-// type Assingment : String enum{
-//     SUBMITTED;
-//     PENDING;
-//     ACCEPTED;
-//     REJECTED;
-// }
 
 
 // aspect address {
