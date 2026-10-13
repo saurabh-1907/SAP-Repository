@@ -1,0 +1,11 @@
+ID,nameFirst,nameLast,nameInitials,nameMiddle,gender,language,loginName,phoneNumber,email,Currency_code,salaryAmount,accountNumber,bankId,bankName
+67d3afcf-3392-5888-b5a1-ca67c15abe9e,Rahul,Sharma,RS,,M,EN,RAHULS,+15550100001,rahul.sharma@example.com,INR,75000,ACC100001,BNK001,Bangalore Bank
+10d6d592-5544-5997-8aa3-39a17c392157,Priya,Verma,PV,,F,EN,PRIYAV,+15550100002,priya.verma@example.com,INR,68000,ACC100002,BNK002,Chennai Bank
+68454c71-182d-502b-8589-7261f897c39f,John,Smith,JS,,M,EN,JOHNS,+15550100003,john.smith@example.com,USD,85000,ACC100003,BNK003,New York Bank
+a727512a-3352-589d-87ee-4795b8b13b38,Sarah,Jones,SJ,,F,EN,SARAHJ,+442079460004,sarah.jones@example.com,GBP,72000,ACC100004,BNK004,London Bank
+6eb6f187-fe4c-5e77-bdb5-6b7c25208052,Akash,Gupta,AG,,M,EN,AKASHG,+15550100005,akash.gupta@example.com,INR,90000,ACC100005,BNK005,Hyderabad Bank
+51d91791-87ba-5910-8597-4c4c41a21980,Emily,Brown,EB,,F,EN,EMILYB,+15550100006,emily.brown@example.com,SGD,78000,ACC100006,BNK006,Singapore Bank
+ca090ed8-8cdf-5e76-b946-57750acc5da6,Michael,Lee,ML,,M,EN,MICHAELL,+15550100007,michael.lee@example.com,AUD,69000,ACC100007,BNK007,Sydney Bank
+1f76adc7-e936-5ce4-86a7-c1f8e60eeaa6,Sneha,Reddy,SR,,F,DE,SNEHAR,+15550100008,sneha.reddy@example.com,EUR,81000,ACC100008,BNK008,Berlin Bank
+c4f76ed5-20a6-5fd0-9e9d-5c79f562f348,David,Wilson,DW,,M,EN,DAVIDW,+15550100009,david.wilson@example.com,CAD,76000,ACC100009,BNK009,Toronto Bank
+426695f3-c5be-53c7-8596-c5b66ebd14ef,Karthik,Raj,KR,,M,EN,KARTHIKR,+15550100010,karthik.raj@example.com,INR,65000,ACC100010,BNK010,Chennai Bank
