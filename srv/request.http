@@ -3,3 +3,24 @@
 ###
 
 GET http://localhost:4004/odata/v4/catalog/getUtilities()
+
+###
+# READ CSV DATA
+###
+
+GET http://localhost:4004/odata/v4/catalog/EmployeeSrv
+
+###
+GET http://localhost:4004/odata/v4/catalog/ProductSrv
+
+###
+GET http://localhost:4004/odata/v4/catalog/BusinessPartnerSrv?$expand=AD
+
+###
+GET http://localhost:4004/odata/v4/catalog/AddressSrv
+
+###
+GET http://localhost:4004/odata/v4/catalog/PurchaseOrderSrv?$expand=Items,PARTNER
+
+###
+GET http://localhost:4004/odata/v4/catalog/PurchaseItemSrv
