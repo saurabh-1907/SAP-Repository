@@ -14,7 +14,15 @@
   "scripts": {
     "start": "cds-serve",
     "watch-poaapp": "cds watch --open poaapp.poaapp/index.html?sap-ui-xx-viewCache=false --livereload false",
-    "watch-poapplication": "cds watch --open poapplication/index.html?sap-ui-xx-viewCache=false --livereload false",
+    "watch-poapplication": "cds watch --open poapplication.poapplication/index.html?sap-ui-xx-viewCache=false --livereload false",
     "watch-poapp": "cds watch --open poapp/index.html?sap-ui-xx-viewCache=false --livereload false"
-  }
+  },
+  "type": "module",
+  "private": true,
+  "workspaces": [
+    "app/*"
+  ],
+  "sapux": [
+    "app/poapplication"
+  ]
 }
