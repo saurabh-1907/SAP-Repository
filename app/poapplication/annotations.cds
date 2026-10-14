@@ -131,22 +131,30 @@ annotate service.PurchaseOrderSrv with @(
     },
 
 // ==================================================
-// PURCHASE ORDER - OBJECT PAGE BODY (extra)
+// PURCHASE ORDER - OBJECT PAGE BODY
 // ==================================================
 
     UI.Facets                : [
         {
-            $Type : 'UI.ReferenceFacet',
-            ID    : 'GeneralInfo',
-            Label : 'General Information',
-            Target: '@UI.FieldGroup#General'
+            $Type : 'UI.CollectionFacet',
+            ID    : 'OtherDetails',
+            Label : 'Other details',
+            Facets: [
+                {
+                    $Type : 'UI.ReferenceFacet',
+                    ID    : 'AmountInfo',
+                    Label : 'Amount Information',
+                    Target: '@UI.FieldGroup#AmountInfo'
+                },
+                {
+                    $Type : 'UI.ReferenceFacet',
+                    ID    : 'AddressInfo',
+                    Label : 'Address Information',
+                    Target: '@UI.FieldGroup#AddressInfo'
+                }
+            ]
         },
-        {
-            $Type : 'UI.ReferenceFacet',
-            ID    : 'PricingInfo',
-            Label : 'Pricing',
-            Target: '@UI.FieldGroup#Pricing'
-        },
+        // Extra: items of the order
         {
             $Type : 'UI.ReferenceFacet',
             ID    : 'POItems',
@@ -155,23 +163,45 @@ annotate service.PurchaseOrderSrv with @(
         }
     ],
 
-    UI.FieldGroup #General   : {
+    UI.FieldGroup #AmountInfo: {
         Data: [
-            { Value: PO_ID },
-            { Value: COMPANY_NAME },
-            { Value: CITY },
-            { Value: partnerCountryDesc },
-            { Value: LSTEXT, Criticality: LSC },
-            { Value: OSTEXT, Criticality: OSC }
+            {
+                $Type: 'UI.DataField',
+                Value: GROSS_AMOUNT
+            },
+            {
+                $Type: 'UI.DataField',
+                Value: NET_AMOUNT
+            },
+            {
+                $Type: 'UI.DataField',
+                Value: TAX_AMOUNT
+            },
+            {
+                $Type: 'UI.DataField',
+                Value: CURRENCY_code
+            }
         ]
     },
 
-    UI.FieldGroup #Pricing   : {
+    UI.FieldGroup #AddressInfo: {
         Data: [
-            { Value: GROSS_AMOUNT },
-            { Value: NET_AMOUNT },
-            { Value: TAX_AMOUNT },
-            { Value: CURRENCY_code }
+            {
+                $Type: 'UI.DataField',
+                Value: COMPANY_NAME
+            },
+            {
+                $Type: 'UI.DataField',
+                Value: BUILDING
+            },
+            {
+                $Type: 'UI.DataField',
+                Value: STREET
+            },
+            {
+                $Type: 'UI.DataField',
+                Value: CITY
+            }
         ]
     }
 );
