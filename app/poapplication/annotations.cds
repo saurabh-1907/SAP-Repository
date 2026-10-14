@@ -42,7 +42,7 @@ annotate service.PurchaseOrderSrv with @(
         TypeNamePlural : 'Purchase Orders',
         Title          : { Value : PO_ID },
         Description    : { Value : PARTNER.COMPANY_NAME },
-        ImageUrl       : 'images/logo.svg'
+        ImageUrl       : 'https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg'
     },
 
     UI.HeaderFacets : [
