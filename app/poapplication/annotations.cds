@@ -42,7 +42,7 @@ annotate service.PurchaseOrderSrv with @(
         TypeNamePlural : 'Purchase Orders',
         Title          : { Value : PO_ID },
         Description    : { Value : PARTNER.COMPANY_NAME },
-        ImageUrl       : 'https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg'
+        ImageUrl       : ImageUrl
     },
 
     UI.HeaderFacets : [
@@ -117,6 +117,7 @@ annotate service.PurchaseOrderSrv with {
     LifeCycleCriticality @UI.Hidden;
     OverallCriticality   @UI.Hidden;
     NODE_KEY             @UI.Hidden;
+    ImageUrl             @UI.IsImageURL  @UI.Hidden;
 };
 
 annotate service.BusinessPartnerSrv with {

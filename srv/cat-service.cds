@@ -60,7 +60,8 @@ service CatalogService {
             when 'N' then 2
             when 'X' then 1
             else 0
-        end as OverallCriticality : Integer
+        end as OverallCriticality : Integer,
+        'https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg' as ImageUrl : String(255)
     } actions {
 
         @Common.SideEffects: {
