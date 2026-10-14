@@ -1,11 +1,11 @@
-NODE_KEY,BP_ROLE,EMAIL,MOBILE,FAX,WEB,BP_ID,COMPANY_NAME
-1c7ba6be-014e-52f9-a246-988565c303d2,01,contact@infosys.com,+15550200001,+15550300001,https://www.infosys.com,53fd8d91-a133-53ac-84d6-9f9aec43efd1,Infosys Ltd
-33f7889d-5abb-5a7e-84e8-138e3fa5a28a,02,contact@tata.com,+15550200002,+15550300002,https://www.tata.com,bb1c6ab9-a242-54fb-b8f1-a6832a4f5d63,Tata Consultancy
-2552614b-4c4a-5397-bdc5-d0d619e7a81e,01,contact@acme.com,+15550200003,+15550300003,https://www.acme.com,04625f43-7b75-5510-9f86-046d91525d89,Acme Corp
-a9f75eda-6b86-50bd-8675-024605a27684,02,contact@globex.com,+15550200004,+15550300004,https://www.globex.com,cf0ed68c-08e1-55ea-9b39-9fb5b2ac2f20,Globex Corporation
-5da69f4c-d09a-570b-9591-2dd6af51fce6,01,contact@initech.com,+15550200005,+15550300005,https://www.initech.com,ef3507df-0bd2-5c74-aacf-bf9e0dbbfb78,Initech
-5b9fff73-78b7-5dbb-ab57-1ca9d46ff7b8,02,contact@umbrella.com,+15550200006,+15550300006,https://www.umbrella.com,31afabe3-7bc6-57f4-b5ee-9224951f67b6,Umbrella Supplies
-5a611b1c-14e7-5d48-b101-1f062c5dd71b,01,contact@stark.com,+15550200007,+15550300007,https://www.stark.com,694f663b-14b4-56bd-ae18-335c19df38aa,Stark Industries
-c62d4006-a694-59d1-96fd-dd0db915e0ae,02,contact@wayne.com,+15550200008,+15550300008,https://www.wayne.com,750e6ab6-7b55-5664-a63b-2deda776b696,Wayne Enterprises
-1ff871cb-6ac0-5a8f-8ded-e7d56df8c00e,01,contact@siemens.com,+15550200009,+15550300009,https://www.siemens.com,3d329b32-177f-52ae-97ee-5873f98e3d52,Siemens AG
-fbfd32c6-1f18-5f23-9dd3-444a3cd9a7e9,02,contact@soylent.com,+15550200010,+15550300010,https://www.soylent.com,4f98c265-6bd7-5e1e-b393-afcd2dc9dcce,Soylent Foods
+NODE_KEY,BP_ROLE,EMAIL,MOBILE,FAX,WEB,BP_ID,COMPANY_NAME,ADDRESS_NODE_KEY
+1c7ba6be-014e-52f9-a246-988565c303d2,01,contact@south.example.com,+15550200001,+15550300001,https://www.south.example.com,100000000,South American IT Company,eb8c1d88-72bc-5b0e-993c-c74748d80adc
+33f7889d-5abb-5a7e-84e8-138e3fa5a28a,02,contact@getraenkegrosshandel.example.com,+15550200002,+15550300002,https://www.getraenkegrosshandel.example.com,100000001,Getraenkegrosshandel Janssen,5b2aa656-3cd5-590c-9d8a-2fef514e4db7
+2552614b-4c4a-5397-bdc5-d0d619e7a81e,01,contact@danish.example.com,+15550200003,+15550300003,https://www.danish.example.com,100000002,Danish Fish Trading Company,96efd499-e030-5566-ba58-cf16da4d9850
+a9f75eda-6b86-50bd-8675-024605a27684,02,contact@new.example.com,+15550200004,+15550300004,https://www.new.example.com,100000003,New Line Design,a15f83e9-b21e-5f6e-ad13-193b1f5bfa13
+5da69f4c-d09a-570b-9591-2dd6af51fce6,01,contact@talpa.example.com,+15550200005,+15550300005,https://www.talpa.example.com,100000004,Talpa,a4f79af5-a8d6-5d1f-9109-9cc872833e0c
+5b9fff73-78b7-5dbb-ab57-1ca9d46ff7b8,02,contact@becker.example.com,+15550200006,+15550300006,https://www.becker.example.com,100000005,Becker Berlin,09d9a57d-9215-53b4-adec-c2ddd2204a73
+5a611b1c-14e7-5d48-b101-1f062c5dd71b,01,contact@mexican.example.com,+15550200007,+15550300007,https://www.mexican.example.com,100000006,Mexican Oil Trading Company,827e51f6-7c0b-5171-bc92-c2c7a5236b73
+c62d4006-a694-59d1-96fd-dd0db915e0ae,02,contact@bionic.example.com,+15550200008,+15550300008,https://www.bionic.example.com,100000007,Bionic Research Lab,7704e7b8-7c96-509e-a790-d9ad979d1dfa
+1ff871cb-6ac0-5a8f-8ded-e7d56df8c00e,01,contact@robert.example.com,+15550200009,+15550300009,https://www.robert.example.com,100000008,Robert Brown Entertainment,aa2de1f4-a119-5b7a-be91-24d610b698e1
+fbfd32c6-1f18-5f23-9dd3-444a3cd9a7e9,02,contact@pear.example.com,+15550200010,+15550300010,https://www.pear.example.com,100000009,Pear Computing Services,3cf0b318-1f40-5650-bcd4-a5470d6d13ab

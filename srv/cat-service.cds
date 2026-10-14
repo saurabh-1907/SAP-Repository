@@ -35,7 +35,40 @@ service CatalogService {
     as projection on database.master.Addresses;
 
     entity PurchaseOrderSrv
-    as projection on database.transaction.PurchaseOrders;
+    as projection on database.transaction.PurchaseOrders {
+        *,
+        case LIFECYCLE_STATUS
+            when 'N' then 'Not Started'
+            when 'I' then 'In Progress'
+            when 'C' then 'Completed'
+            else 'Unknown'
+        end as LifeCycleStatus : String(20),
+        case LIFECYCLE_STATUS
+            when 'N' then 2
+            when 'I' then 0
+            when 'C' then 3
+            else 0
+        end as LifeCycleCriticality : Integer,
+        case OVERALL_STATUS
+            when 'P' then 'Processed'
+            when 'N' then 'New'
+            when 'X' then 'Rejected'
+            else 'Unknown'
+        end as OverallStatus : String(20),
+        case OVERALL_STATUS
+            when 'P' then 3
+            when 'N' then 2
+            when 'X' then 1
+            else 0
+        end as OverallCriticality : Integer
+    } actions {
+
+        @Common.SideEffects: {
+            TargetProperties: ['in/GROSS_AMOUNT', 'in/NET_AMOUNT', 'in/TAX_AMOUNT']
+        }
+        action discount()
+            returns PurchaseOrderSrv;
+    };
 
     entity PurchaseItemSrv
     as projection on database.transaction.PurchaseItems;
