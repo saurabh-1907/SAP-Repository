@@ -52,13 +52,13 @@ GET http://localhost:4004/odata/v4/catalog/PurchaseOrderSrv(6a425234-f3cf-5687-8
 GET http://localhost:4004/odata/v4/catalog/PurchaseOrderSrv?$filter=partnerCountryDesc eq 'Canada'
 
 ###
-POST http://localhost:4004/odata/v4/catalog/ProductSrv(65d3b189-8766-5e9c-ab68-8ec94aa6bea7)/CatalogService.increasePrice
+POST http://localhost:4004/odata/v4/catalog/ProductSrv(74867AD200E41EDBA5D8B06B26F60052)/CatalogService.increasePrice
 Content-Type: application/json
 
 {}
 
 ###
-GET http://localhost:4004/odata/v4/catalog/ProductSrv(65d3b189-8766-5e9c-ab68-8ec94aa6bea7)/CatalogService.top_20_product()
+GET http://localhost:4004/odata/v4/catalog/ProductSrv(74867AD200E41EDBA5D8B06B26F60052)/CatalogService.top_20_product()
 
 ###
 POST http://localhost:4004/odata/v4/catalog/EmployeeSrv(67d3afcf-3392-5888-b5a1-ca67c15abe9e)/CatalogService.increaseSalary
@@ -99,7 +99,7 @@ POST http://localhost:4004/odata/v4/catalog/updateProductPrice
 Content-Type: application/json
 
 {
-    "NODE_KEY": "65d3b189-8766-5e9c-ab68-8ec94aa6bea7",
+    "NODE_KEY": "74867AD200E41EDBA5D8B06B26F60052",
     "PRICE": 500
 }
 
