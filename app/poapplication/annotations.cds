@@ -41,7 +41,28 @@ annotate service.PurchaseOrderSrv with @(
         TypeName       : 'Purchase Order',
         TypeNamePlural : 'Purchase Orders',
         Title          : { Value : PO_ID },
-        Description    : { Value : PARTNER.COMPANY_NAME }
+        Description    : { Value : PARTNER.COMPANY_NAME },
+        ImageUrl       : 'images/logo.svg'
+    },
+
+    UI.HeaderFacets : [
+        {
+            $Type  : 'UI.ReferenceFacet',
+            ID     : 'BPDetails',
+            Label  : 'Business Partner Details',
+            Target : '@UI.FieldGroup#BPDetails'
+        }
+    ],
+
+    UI.FieldGroup #BPDetails : {
+        Data : [
+            { Value : PARTNER.BP_ID },
+            { Value : PARTNER.BP_ROLE },
+            { Value : PARTNER.COMPANY_NAME },
+            { Value : PARTNER.EMAIL },
+            { Value : PARTNER.FAX },
+            { Value : PARTNER.MOBILE }
+        ]
     },
 
     UI.Facets : [
@@ -99,7 +120,12 @@ annotate service.PurchaseOrderSrv with {
 };
 
 annotate service.BusinessPartnerSrv with {
+    BP_ID        @title : 'BP ID';
+    BP_ROLE      @title : 'BP Role';
     COMPANY_NAME @title : 'Company Name';
+    EMAIL        @title : 'Email';
+    FAX          @title : 'Fax';
+    MOBILE       @title : 'Mobile';
 };
 
 annotate service.AddressSrv with {
