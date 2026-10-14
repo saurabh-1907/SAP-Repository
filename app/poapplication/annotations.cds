@@ -144,26 +144,25 @@ annotate service.PurchaseOrderSrv with @(
                     $Type : 'UI.ReferenceFacet',
                     ID    : 'AmountInfo',
                     Label : 'Amount Information',
-                    Target: '@UI.FieldGroup#AmountInfo'
+                    Target: '@UI.FieldGroup#BPAmtInfo'
                 },
                 {
                     $Type : 'UI.ReferenceFacet',
                     ID    : 'AddressInfo',
                     Label : 'Address Information',
-                    Target: '@UI.FieldGroup#AddressInfo'
+                    Target: '@UI.FieldGroup#BPAddrInfo'
                 }
             ]
         },
-        // Extra: items of the order
         {
             $Type : 'UI.ReferenceFacet',
             ID    : 'POItems',
-            Label : 'PO Items',
+            Label : 'Purchase Item Details',
             Target: 'Items/@UI.LineItem'
         }
     ],
 
-    UI.FieldGroup #AmountInfo: {
+    UI.FieldGroup #BPAmtInfo : {
         Data: [
             {
                 $Type: 'UI.DataField',
@@ -184,7 +183,7 @@ annotate service.PurchaseOrderSrv with @(
         ]
     },
 
-    UI.FieldGroup #AddressInfo: {
+    UI.FieldGroup #BPAddrInfo: {
         Data: [
             {
                 $Type: 'UI.DataField',
@@ -225,13 +224,32 @@ annotate service.PurchaseItemSrv with @(
         Description   : { Value: PO_ITEM_POS }
     },
 
+    UI.SelectionFields : [
+        PO_ITEM_POS,
+        PRODUCT_NODE_KEY
+    ],
+
     UI.LineItem  : [
-        { Value: PO_ITEM_POS },
-        { Value: PRODUCT.PRODUCT_ID },
-        { Value: PRODUCT.DESCRIPTION },
-        { Value: PRODUCT.CATEGORY },
-        { Value: GROSS_AMOUNT },
-        { Value: CURRENCY_code }
+        {
+            $Type: 'UI.DataField',
+            Value: PO_ITEM_POS
+        },
+        {
+            $Type: 'UI.DataField',
+            Value: PRODUCT_NODE_KEY
+        },
+        {
+            $Type: 'UI.DataField',
+            Value: GROSS_AMOUNT
+        },
+        {
+            $Type: 'UI.DataField',
+            Value: NET_AMOUNT
+        },
+        {
+            $Type: 'UI.DataField',
+            Value: TAX_AMOUNT
+        }
     ],
 
     UI.Facets    : [
