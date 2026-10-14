@@ -169,7 +169,7 @@ service CatalogService {
                                                           @(title: '{i18n>OVERALL_STATUS}'),
 
                 // Header image of the object page
-                'https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg'
+                'https://upload.wikimedia.org/wikipedia/commons/4/4a/Amazon_icon.svg'
                                     as ImageUrl : String(255)
         }
 
