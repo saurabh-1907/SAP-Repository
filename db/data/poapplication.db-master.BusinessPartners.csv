@@ -1,6 +1,6 @@
 NODE_KEY,BP_ROLE,EMAIL,MOBILE,FAX,WEB,BP_ID,COMPANY_NAME,ADDRESS_NODE_KEY
 1c7ba6be-014e-52f9-a246-988565c303d2,01,contact@south.example.com,+15550200001,+15550300001,https://www.south.example.com,100000000,South American IT Company,eb8c1d88-72bc-5b0e-993c-c74748d80adc
-33f7889d-5abb-5a7e-84e8-138e3fa5a28a,02,contact@getraenkegrosshandel.example.com,+15550200002,+15550300002,https://www.getraenkegrosshandel.example.com,100000001,Getraenkegrosshandel Janssen,5b2aa656-3cd5-590c-9d8a-2fef514e4db7
+33f7889d-5abb-5a7e-84e8-138e3fa5a28a,02,contact@getrnkegrohandel.example.com,+15550200002,+15550300002,https://www.getrnkegrohandel.example.com,100000001,Getränkegroßhandel Janssen,5b2aa656-3cd5-590c-9d8a-2fef514e4db7
 2552614b-4c4a-5397-bdc5-d0d619e7a81e,01,contact@danish.example.com,+15550200003,+15550300003,https://www.danish.example.com,100000002,Danish Fish Trading Company,96efd499-e030-5566-ba58-cf16da4d9850
 a9f75eda-6b86-50bd-8675-024605a27684,02,contact@new.example.com,+15550200004,+15550300004,https://www.new.example.com,100000003,New Line Design,a15f83e9-b21e-5f6e-ad13-193b1f5bfa13
 5da69f4c-d09a-570b-9591-2dd6af51fce6,01,contact@talpa.example.com,+15550200005,+15550300005,https://www.talpa.example.com,100000004,Talpa,a4f79af5-a8d6-5d1f-9109-9cc872833e0c
@@ -9,3 +9,5 @@ a9f75eda-6b86-50bd-8675-024605a27684,02,contact@new.example.com,+15550200004,+15
 c62d4006-a694-59d1-96fd-dd0db915e0ae,02,contact@bionic.example.com,+15550200008,+15550300008,https://www.bionic.example.com,100000007,Bionic Research Lab,7704e7b8-7c96-509e-a790-d9ad979d1dfa
 1ff871cb-6ac0-5a8f-8ded-e7d56df8c00e,01,contact@robert.example.com,+15550200009,+15550300009,https://www.robert.example.com,100000008,Robert Brown Entertainment,aa2de1f4-a119-5b7a-be91-24d610b698e1
 fbfd32c6-1f18-5f23-9dd3-444a3cd9a7e9,02,contact@pear.example.com,+15550200010,+15550300010,https://www.pear.example.com,100000009,Pear Computing Services,3cf0b318-1f40-5650-bcd4-a5470d6d13ab
+34aa059b-c36d-57d6-817e-5116b920c80d,01,contact@compostela.example.com,+15550200011,+15550300011,https://www.compostela.example.com,100000010,Compostela,dac71b42-83ea-5e78-b43c-912052b29484
+e5ceff4e-372d-51aa-957e-81224f534cf2,02,contact@entertainment.example.com,+15550200012,+15550300012,https://www.entertainment.example.com,100000011,Entertainment Argentinia,bc65c2cd-b193-585e-b1ac-e2a6d6a735a0

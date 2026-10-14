@@ -23,7 +23,7 @@ annotate service.PurchaseOrderSrv with @(
         },
         { $Type : 'UI.DataField', Value : PARTNER.COMPANY_NAME },
         { $Type : 'UI.DataField', Value : GROSS_AMOUNT },
-        { $Type : 'UI.DataField', Value : CURRENCY_code },
+        { $Type : 'UI.DataField', Value : CURRENCY_code, Label : 'Currency Code' },
         {
             $Type       : 'UI.DataField',
             Value       : LifeCycleStatus,
