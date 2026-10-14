@@ -1,4 +1,4 @@
-NODE_KEY,BP_ROLE,EMAIL,MOBILE,FAX,WEB,BP_ID,COMPANY_NAME,ADDRESS_NODE_KEY
+NODE_KEY,BP_ROLE,EMAIL,MOBILE,FAX,WEB,BP_ID,COMPANY_NAME,AD_NODE_KEY
 1c7ba6be-014e-52f9-a246-988565c303d2,2,contact@south.example.com,1438907237,1438907011,https://www.south.example.com,100000000,South American IT Company,eb8c1d88-72bc-5b0e-993c-c74748d80adc
 33f7889d-5abb-5a7e-84e8-138e3fa5a28a,2,contact@getrnkegrohandel.example.com,1438907244,1438907018,https://www.getrnkegrohandel.example.com,100000001,Getränkegroßhandel Janssen,5b2aa656-3cd5-590c-9d8a-2fef514e4db7
 2552614b-4c4a-5397-bdc5-d0d619e7a81e,2,contact@danish.example.com,1438907251,1438907025,https://www.danish.example.com,100000002,Danish Fish Trading Company,96efd499-e030-5566-ba58-cf16da4d9850

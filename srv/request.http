@@ -24,3 +24,84 @@ GET http://localhost:4004/odata/v4/catalog/PurchaseOrderSrv?$expand=Items,PARTNE
 
 ###
 GET http://localhost:4004/odata/v4/catalog/PurchaseItemSrv
+
+
+###
+# CLASS ENDPOINTS
+###
+
+# Purchase order 300000001
+GET http://localhost:4004/odata/v4/catalog/PurchaseOrderSrv(6a425234-f3cf-5687-84da-e6d2591861f9)
+
+###
+POST http://localhost:4004/odata/v4/catalog/PurchaseOrderSrv(6a425234-f3cf-5687-84da-e6d2591861f9)/CatalogService.discountPrice
+Content-Type: application/json
+
+{}
+
+###
+POST http://localhost:4004/odata/v4/catalog/PurchaseOrderSrv(6a425234-f3cf-5687-84da-e6d2591861f9)/CatalogService.discount
+Content-Type: application/json
+
+{}
+
+###
+GET http://localhost:4004/odata/v4/catalog/PurchaseOrderSrv(6a425234-f3cf-5687-84da-e6d2591861f9)/CatalogService.largestOrder()
+
+###
+GET http://localhost:4004/odata/v4/catalog/PurchaseOrderSrv?$filter=partnerCountryDesc eq 'Canada'
+
+###
+POST http://localhost:4004/odata/v4/catalog/ProductSrv(65d3b189-8766-5e9c-ab68-8ec94aa6bea7)/CatalogService.increasePrice
+Content-Type: application/json
+
+{}
+
+###
+GET http://localhost:4004/odata/v4/catalog/ProductSrv(65d3b189-8766-5e9c-ab68-8ec94aa6bea7)/CatalogService.top_20_product()
+
+###
+POST http://localhost:4004/odata/v4/catalog/EmployeeSrv(67d3afcf-3392-5888-b5a1-ca67c15abe9e)/CatalogService.increaseSalary
+Content-Type: application/json
+
+{}
+
+###
+GET http://localhost:4004/odata/v4/catalog/EmployeeSrv(67d3afcf-3392-5888-b5a1-ca67c15abe9e)/CatalogService.Top20PaidEmployee()
+
+###
+POST http://localhost:4004/odata/v4/catalog/createProduct
+Content-Type: application/json
+
+{
+    "PRODUCT_ID": "PROD001",
+    "TYPE_CODE": "PR",
+    "CATEGORY": "Electronics",
+    "DESCRIPTION": "Wireless Bluetooth Headphones",
+    "PRICE": 4999.00,
+    "CURRENCY_CODE": "INR"
+}
+
+###
+POST http://localhost:4004/odata/v4/catalog/createAddressSrv
+Content-Type: application/json
+
+{
+    "ADDRESS_TYPE": "Office",
+    "CITY": "Chennai",
+    "COUNTRY": "IN",
+    "STREET": "Anna Salai",
+    "POSTAL_CODE": "600002"
+}
+
+###
+POST http://localhost:4004/odata/v4/catalog/updateProductPrice
+Content-Type: application/json
+
+{
+    "NODE_KEY": "65d3b189-8766-5e9c-ab68-8ec94aa6bea7",
+    "PRICE": 500
+}
+
+###
+GET http://localhost:4004/odata/v4/catalog/getHeighestPricedProduct()

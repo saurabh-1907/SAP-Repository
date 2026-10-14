@@ -1,0 +1,26 @@
+/* Emphasized Buttons */
+.sapMBtnInner.sapMBtnEmphasized {
+    background: #ff5722 !important;     /* Background color */
+    border: 2px solid #e64a19 !important;
+    color: #ffffff !important;
+
+    font-size: 18px !important;         /* Text size */
+    font-weight: bold !important;
+
+    height: 3rem !important;            /* Height */
+    min-width: 12rem !important;        /* Width */
+
+    border-radius: 8px !important;
+}
+
+/* Text inside button */
+.sapMBtnEmphasized.sapMBtnInner.sapMBtnText {
+    font-size: 18px !important;
+    font-family: Arial, sans-serif !important;
+}
+
+/* Compact mode padding */
+.sapUiSizeCompact .sapMBtnInner.sapMBtnText {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+}

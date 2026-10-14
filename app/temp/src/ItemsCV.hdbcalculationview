@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="ItemsCV" applyPrivilegeType="NONE" dataCategory="DIMENSION" dimensionType="STANDARD" schemaVersion="3.0" hierarchyGeneration="SQL" outputViewType="Projection" cacheInvalidationPeriod="NONE" enforceSqlExecution="true" application="BAS">
+<descriptions defaultDescription="ItemsCV"/>
+<localVariables/>
+<variableMappings/>
+<dataSources>
+  <DataSource id="POAPPLICATION_DB_TRANSACTION_PURCHASEITEMS">
+    <resourceUri>POAPPLICATION_DB_TRANSACTION_PURCHASEITEMS</resourceUri>
+  </DataSource>
+  <DataSource id="POAPPLICATION_DB_MASTER_PRODUCTS">
+    <resourceUri>POAPPLICATION_DB_MASTER_PRODUCTS</resourceUri>
+  </DataSource>
+</dataSources>
+<snapshotProcedures/>
+<calculationViews>
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_1">
+    <viewAttributes>
+      <viewAttribute id="GROSS_AMOUNT"/>
+      <viewAttribute id="NET_AMOUNT"/>
+      <viewAttribute id="TAX_AMOUNT"/>
+      <viewAttribute id="CURRENCY_CODE"/>
+      <viewAttribute id="NODE_KEY"/>
+      <viewAttribute id="PARENT_NODE_KEY"/>
+      <viewAttribute id="PO_ITEM_POS"/>
+      <viewAttribute id="PRODUCT_NODE_KEY"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="POAPPLICATION_DB_TRANSACTION_PURCHASEITEMS"/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_2">
+    <viewAttributes>
+      <viewAttribute id="NODE_KEY"/>
+      <viewAttribute id="PRODUCT_ID"/>
+      <viewAttribute id="TYPE_CODE"/>
+      <viewAttribute id="CATEGORY"/>
+      <viewAttribute id="DESCRIPTION"/>
+      <viewAttribute id="TAX_TARIF_CODE"/>
+      <viewAttribute id="MEASURE_UNIT"/>
+      <viewAttribute id="WEIGHT_MEASURE"/>
+      <viewAttribute id="WEIGHT_UNIT"/>
+      <viewAttribute id="PRICE"/>
+      <viewAttribute id="CURRENCY_CODE"/>
+      <viewAttribute id="WIDTH"/>
+      <viewAttribute id="DEPTH"/>
+      <viewAttribute id="HEIGHT"/>
+      <viewAttribute id="DIM_UNIT"/>
+      <viewAttribute id="SUPPLIERS_NODE_KEY"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="POAPPLICATION_DB_MASTER_PRODUCTS"/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:JoinView" id="Join_1" cardinality="C1_1" joinType="inner">
+    <viewAttributes>
+      <viewAttribute id="GROSS_AMOUNT"/>
+      <viewAttribute id="NET_AMOUNT"/>
+      <viewAttribute id="TAX_AMOUNT"/>
+      <viewAttribute id="CURRENCY_CODE"/>
+      <viewAttribute id="NODE_KEY"/>
+      <viewAttribute id="PARENT_NODE_KEY"/>
+      <viewAttribute id="PO_ITEM_POS"/>
+      <viewAttribute id="PRODUCT_NODE_KEY"/>
+      <viewAttribute id="NODE_KEY_1"/>
+      <viewAttribute id="PRODUCT_ID"/>
+      <viewAttribute id="TYPE_CODE"/>
+      <viewAttribute id="CATEGORY"/>
+      <viewAttribute id="DESCRIPTION"/>
+      <viewAttribute id="TAX_TARIF_CODE"/>
+      <viewAttribute id="MEASURE_UNIT"/>
+      <viewAttribute id="WEIGHT_MEASURE"/>
+      <viewAttribute id="WEIGHT_UNIT"/>
+      <viewAttribute id="PRICE"/>
+      <viewAttribute id="CURRENCY_CODE_1"/>
+      <viewAttribute id="WIDTH"/>
+      <viewAttribute id="DEPTH"/>
+      <viewAttribute id="HEIGHT"/>
+      <viewAttribute id="DIM_UNIT"/>
+      <viewAttribute id="SUPPLIERS_NODE_KEY"/>
+      <viewAttribute hidden="true" id="JOIN$PRODUCT_NODE_KEY$NODE_KEY"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="Projection_1">
+      <mapping xsi:type="Calculation:AttributeMapping" target="GROSS_AMOUNT" source="GROSS_AMOUNT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="NET_AMOUNT" source="NET_AMOUNT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="TAX_AMOUNT" source="TAX_AMOUNT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CURRENCY_CODE" source="CURRENCY_CODE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="NODE_KEY" source="NODE_KEY"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="PARENT_NODE_KEY" source="PARENT_NODE_KEY"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="PO_ITEM_POS" source="PO_ITEM_POS"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="PRODUCT_NODE_KEY" source="PRODUCT_NODE_KEY"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$PRODUCT_NODE_KEY$NODE_KEY" source="PRODUCT_NODE_KEY"/>
+    </input>
+    <input node="Projection_2">
+      <mapping xsi:type="Calculation:AttributeMapping" target="NODE_KEY_1" source="NODE_KEY"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="PRODUCT_ID" source="PRODUCT_ID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="TYPE_CODE" source="TYPE_CODE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CATEGORY" source="CATEGORY"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="DESCRIPTION" source="DESCRIPTION"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="TAX_TARIF_CODE" source="TAX_TARIF_CODE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="MEASURE_UNIT" source="MEASURE_UNIT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="WEIGHT_MEASURE" source="WEIGHT_MEASURE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="WEIGHT_UNIT" source="WEIGHT_UNIT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="PRICE" source="PRICE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CURRENCY_CODE_1" source="CURRENCY_CODE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="WIDTH" source="WIDTH"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="DEPTH" source="DEPTH"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="HEIGHT" source="HEIGHT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="DIM_UNIT" source="DIM_UNIT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="SUPPLIERS_NODE_KEY" source="SUPPLIERS_NODE_KEY"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$PRODUCT_NODE_KEY$NODE_KEY" source="NODE_KEY"/>
+    </input>
+    <joinAttribute name="JOIN$PRODUCT_NODE_KEY$NODE_KEY"/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:RankView" id="Rank_1">
+    <viewAttributes>
+      <viewAttribute id="GROSS_AMOUNT"/>
+      <viewAttribute id="NET_AMOUNT"/>
+      <viewAttribute id="TAX_AMOUNT"/>
+      <viewAttribute id="CURRENCY_CODE"/>
+      <viewAttribute id="NODE_KEY"/>
+      <viewAttribute id="PARENT_NODE_KEY"/>
+      <viewAttribute id="PO_ITEM_POS"/>
+      <viewAttribute id="PRODUCT_NODE_KEY"/>
+      <viewAttribute id="NODE_KEY_1"/>
+      <viewAttribute id="PRODUCT_ID"/>
+      <viewAttribute id="TYPE_CODE"/>
+      <viewAttribute id="CATEGORY"/>
+      <viewAttribute id="DESCRIPTION"/>
+      <viewAttribute id="TAX_TARIF_CODE"/>
+      <viewAttribute id="MEASURE_UNIT"/>
+      <viewAttribute id="WEIGHT_MEASURE"/>
+      <viewAttribute id="WEIGHT_UNIT"/>
+      <viewAttribute id="PRICE"/>
+      <viewAttribute id="CURRENCY_CODE_1"/>
+      <viewAttribute id="WIDTH"/>
+      <viewAttribute id="DEPTH"/>
+      <viewAttribute id="HEIGHT"/>
+      <viewAttribute id="DIM_UNIT"/>
+      <viewAttribute id="SUPPLIERS_NODE_KEY"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="Join_1"/>
+    <rankingFilter type="RANK" offsetReference="FRONT" dynamicPartitionAttributes="false">
+      <partitionViewAttributeName id="PRICE"/>
+      <order byViewAttributeName="PRICE" direction="ASC"/>
+    </rankingFilter>
+  </calculationView>
+</calculationViews>
+
+<logicalModel id="Rank_1">
+  <attributes/>
+  <calculatedAttributes/>
+  <baseMeasures/>
+  <calculatedMeasures/>
+  <restrictedMeasures/>
+</logicalModel>
+<layout>
+  <shapes>
+    <shape expanded="true" modelObjectName="Output" modelObjectNameSpace="MeasureGroup">
+      <upperLeftCorner x="105" y="105"/>
+    
+      <rectangleSize width="160"/>
+    </shape>
+    
+  
+    <shape expanded="true" modelObjectName="Projection_1" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="-117" y="544"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape expanded="true" modelObjectName="Projection_2" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="339" y="554"/>
+      <rectangleSize height="30" width="160"/>
+    </shape><shape><upperLeftCorner/><rectangleSize/></shape>
+    <shape expanded="true" modelObjectName="Rank_1" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="111" y="210"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+  
+    <shape expanded="true" modelObjectName="Join_1" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="108" y="338"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape modelObjectName="Projection_1" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
+      <upperLeftCorner x="20" y="30"/>
+      <rectangleSize width="223"/>
+    </shape>
+    <shape modelObjectName="Projection_2" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
+      <upperLeftCorner x="320" y="30"/>
+      <rectangleSize width="233"/>
+    </shape></shapes>
+</layout>
+</Calculation:scenario>

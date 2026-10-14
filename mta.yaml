@@ -1,0 +1,89 @@
+_schema-version: 3.3.0
+ID: poapplication
+description: Welcome to your new CAP project.
+version: 1.0.0
+modules:
+- name: poapplication-srv
+  type: nodejs
+  path: gen/srv
+  requires:
+  - name: poapplication-db
+  provides:
+  - name: srv-api
+    properties:
+      srv-url: ${default-url}
+  parameters:
+    buildpack: nodejs_buildpack
+    instances: 1
+  build-parameters:
+    builder: npm-ci
+- name: poapplication-db-deployer
+  type: hdb
+  path: gen/db
+  requires:
+  - name: poapplication-db
+  parameters:
+    buildpack: nodejs_buildpack
+- name: poapplication-app-content
+  type: com.sap.application.content
+  path: .
+  requires:
+  - name: poapplication-repo-host
+    parameters:
+      content-target: true
+  build-parameters:
+    build-result: resources
+    requires:
+    - artifacts:
+      - poapplication.zip
+      name: poapplication
+      target-path: resources/
+- name: poapplication
+  type: html5
+  path: app/poapplication
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+resources:
+- name: poapplication-db
+  type: com.sap.xs.hdi-container
+  parameters:
+    service: hana
+    service-plan: hdi-shared
+- name: poapplication-repo-host
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: html5-apps-repo
+    service-name: poapplication-html5-service
+    service-plan: app-host
+- name: poapplication-destination-service
+  type: org.cloudfoundry.managed-service
+  parameters:
+    config:
+      HTML5Runtime_enabled: false
+      init_data:
+        instance:
+          destinations:
+          - Authentication: NoAuthentication
+            Name: ui5
+            ProxyType: Internet
+            Type: HTTP
+            URL: https://ui5.sap.com
+          existing_destinations_policy: update
+      version: 1.0.0
+    service: destination
+    service-name: poapplication-destination-service
+    service-plan: lite
+parameters:
+  deploy_mode: html5-repo
+  enable-parallel-deployments: true
+build-parameters:
+  before-all:
+  - builder: custom
+    commands:
+    - npm ci
+    - npx cds build --production

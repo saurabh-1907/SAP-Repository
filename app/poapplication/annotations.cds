@@ -1,162 +1,253 @@
 using CatalogService as service from '../../srv/cat-service';
 
 // ==================================================
-// PURCHASE ORDER - LIST REPORT + OBJECT PAGE
+// PURCHASE ORDER - LIST REPORT
 // ==================================================
 
 annotate service.PurchaseOrderSrv with @(
 
-    UI.SelectionFields : [
+    UI.SelectionFields       : [
         PO_ID,
-        PARTNER.COMPANY_NAME,
+        COMPANY_NAME,
         GROSS_AMOUNT,
-        PARTNER.ADDRESS.COUNTRY
+        partnerCountryDesc
     ],
 
-    UI.LineItem : [
-        { $Type : 'UI.DataField', Value : PO_ID },
+    UI.LineItem              : [
         {
-            $Type  : 'UI.DataFieldForAction',
-            Action : 'CatalogService.discount',
-            Label  : 'Discount',
-            Inline : true
-        },
-        { $Type : 'UI.DataField', Value : PARTNER.COMPANY_NAME },
-        { $Type : 'UI.DataField', Value : GROSS_AMOUNT },
-        { $Type : 'UI.DataField', Value : CURRENCY_code, Label : 'Currency Code' },
-        {
-            $Type       : 'UI.DataField',
-            Value       : LifeCycleStatus,
-            Criticality : LifeCycleCriticality
+            $Type: 'UI.DataField',
+            Value: PO_ID
         },
         {
-            $Type       : 'UI.DataField',
-            Value       : OverallStatus,
-            Criticality : OverallCriticality
+            $Type : 'UI.DataFieldForAction',
+            Action: 'CatalogService.discountPrice',
+            Label : 'Discount',
+            Inline: true
         },
-        { $Type : 'UI.DataField', Value : PARTNER.ADDRESS.COUNTRY }
-    ],
-
-    UI.HeaderInfo : {
-        TypeName       : 'Purchase Order',
-        TypeNamePlural : 'Purchase Orders',
-        Title          : { Value : PO_ID },
-        Description    : { Value : PARTNER.COMPANY_NAME },
-        ImageUrl       : ImageUrl
-    },
-
-    UI.HeaderFacets : [
+        // Extra: toolbar button, applies 10% to the selected order
         {
-            $Type  : 'UI.ReferenceFacet',
-            ID     : 'BPDetails',
-            Label  : 'Business Partner Details',
-            Target : '@UI.FieldGroup#BPDetails'
+            $Type : 'UI.DataFieldForAction',
+            Action: 'CatalogService.discount',
+            Label : 'Discount 10%'
+        },
+        {
+            $Type: 'UI.DataField',
+            Value: COMPANY_NAME
+        },
+        {
+            $Type: 'UI.DataField',
+            Value: GROSS_AMOUNT
+        },
+        {
+            $Type: 'UI.DataField',
+            Value: CURRENCY_code
+        },
+        {
+            $Type      : 'UI.DataField',
+            Value      : LSTEXT,
+            Criticality: LSC
+        },
+        {
+            $Type      : 'UI.DataField',
+            Value      : OSTEXT,
+            Criticality: OSC
+        },
+        {
+            $Type: 'UI.DataField',
+            Value: partnerCountryDesc
         }
     ],
 
-    UI.FieldGroup #BPDetails : {
-        Data : [
-            { Value : PARTNER.BP_ID },
-            { Value : PARTNER.BP_ROLE },
-            { Value : PARTNER.COMPANY_NAME },
-            { Value : PARTNER.EMAIL },
-            { Value : PARTNER.FAX },
-            { Value : PARTNER.MOBILE }
-        ]
+// ==================================================
+// PURCHASE ORDER - OBJECT PAGE HEADER
+// ==================================================
+
+    UI.HeaderInfo            : {
+        TypeName      : 'Purchase Order',
+        TypeNamePlural: 'Purchase Orders',
+        Title         : {
+            $Type: 'UI.DataField',
+            Value: PO_ID
+        },
+        Description   : {
+            $Type: 'UI.DataField',
+            Value: COMPANY_NAME
+        },
+        // Image link comes from the ImageUrl field of PurchaseOrderSrv
+        ImageUrl      : ImageUrl
     },
 
-    UI.Facets : [
+    UI.HeaderFacets          : [
         {
-            $Type  : 'UI.ReferenceFacet',
-            ID     : 'GeneralInfo',
-            Label  : 'General Information',
-            Target : '@UI.FieldGroup#General'
-        },
-        {
-            $Type  : 'UI.ReferenceFacet',
-            ID     : 'PricingInfo',
-            Label  : 'Pricing',
-            Target : '@UI.FieldGroup#Pricing'
-        },
-        {
-            $Type  : 'UI.ReferenceFacet',
-            ID     : 'POItems',
-            Label  : 'PO Items',
-            Target : 'Items/@UI.LineItem'
+            $Type : 'UI.CollectionFacet',
+            Label : 'Business Partner Details',
+            Facets: [
+                {
+                    $Type : 'UI.ReferenceFacet',
+                    Label : 'General Information',
+                    Target: '@UI.FieldGroup#BPInfo'
+                },
+                {
+                    $Type : 'UI.ReferenceFacet',
+                    Label : 'Communication Information',
+                    Target: '@UI.FieldGroup#BPCommInfo'
+                }
+            ]
         }
     ],
 
-    UI.FieldGroup #General : {
-        Data : [
-            { Value : PO_ID },
-            { Value : PARTNER.COMPANY_NAME },
-            { Value : PARTNER.ADDRESS.COUNTRY },
-            { Value : LifeCycleStatus, Criticality : LifeCycleCriticality },
-            { Value : OverallStatus,   Criticality : OverallCriticality }
+    UI.FieldGroup #BPInfo    : {
+        Data: [
+            {
+                $Type: 'UI.DataField',
+                Value: BP_ID
+            },
+            {
+                $Type: 'UI.DataField',
+                Value: COMPANY_NAME
+            },
+            {
+                $Type: 'UI.DataField',
+                Value: BP_ROLE
+            }
         ]
     },
 
-    UI.FieldGroup #Pricing : {
-        Data : [
-            { Value : GROSS_AMOUNT },
-            { Value : NET_AMOUNT },
-            { Value : TAX_AMOUNT },
-            { Value : CURRENCY_code }
+    UI.FieldGroup #BPCommInfo: {
+        Data: [
+            {
+                $Type: 'UI.DataField',
+                Value: EMAIL
+            },
+            {
+                $Type: 'UI.DataField',
+                Value: MOBILE
+            },
+            {
+                $Type: 'UI.DataField',
+                Value: FAX
+            }
+        ]
+    },
+
+// ==================================================
+// PURCHASE ORDER - OBJECT PAGE BODY (extra)
+// ==================================================
+
+    UI.Facets                : [
+        {
+            $Type : 'UI.ReferenceFacet',
+            ID    : 'GeneralInfo',
+            Label : 'General Information',
+            Target: '@UI.FieldGroup#General'
+        },
+        {
+            $Type : 'UI.ReferenceFacet',
+            ID    : 'PricingInfo',
+            Label : 'Pricing',
+            Target: '@UI.FieldGroup#Pricing'
+        },
+        {
+            $Type : 'UI.ReferenceFacet',
+            ID    : 'POItems',
+            Label : 'PO Items',
+            Target: 'Items/@UI.LineItem'
+        }
+    ],
+
+    UI.FieldGroup #General   : {
+        Data: [
+            { Value: PO_ID },
+            { Value: COMPANY_NAME },
+            { Value: CITY },
+            { Value: partnerCountryDesc },
+            { Value: LSTEXT, Criticality: LSC },
+            { Value: OSTEXT, Criticality: OSC }
+        ]
+    },
+
+    UI.FieldGroup #Pricing   : {
+        Data: [
+            { Value: GROSS_AMOUNT },
+            { Value: NET_AMOUNT },
+            { Value: TAX_AMOUNT },
+            { Value: CURRENCY_code }
         ]
     }
 );
 
 annotate service.PurchaseOrderSrv with {
-    PO_ID                @title : 'Purchase Order ID';
-    GROSS_AMOUNT         @title : 'Gross Amount';
-    NET_AMOUNT           @title : 'Net Amount';
-    TAX_AMOUNT           @title : 'Tax Amount';
-    CURRENCY             @title : 'Currency';
-    LifeCycleStatus      @title : 'Life Cycle Status';
-    OverallStatus        @title : 'Overall Status';
-    LifeCycleCriticality @UI.Hidden;
-    OverallCriticality   @UI.Hidden;
-    NODE_KEY             @UI.Hidden;
-    ImageUrl             @UI.IsImageURL  @UI.Hidden;
-};
-
-annotate service.BusinessPartnerSrv with {
-    BP_ID        @title : 'BP ID';
-    BP_ROLE      @title : 'BP Role';
-    COMPANY_NAME @title : 'Company Name';
-    EMAIL        @title : 'Email';
-    FAX          @title : 'Fax';
-    MOBILE       @title : 'Mobile';
-};
-
-annotate service.AddressSrv with {
-    COUNTRY @title : 'Country';
+    LSC      @UI.Hidden;
+    OSC      @UI.Hidden;
+    NODE_KEY @UI.Hidden;
+    ImageUrl @UI.IsImageURL  @UI.Hidden;
 };
 
 // ==================================================
-// PURCHASE ITEMS - TABLE ON OBJECT PAGE
+// PURCHASE ITEMS - TABLE + ITEM OBJECT PAGE (extra)
 // ==================================================
 
 annotate service.PurchaseItemSrv with @(
-    UI.LineItem : [
-        { Value : PO_ITEM_POS },
-        { Value : PRODUCT.PRODUCT_ID },
-        { Value : PRODUCT.DESCRIPTION },
-        { Value : PRODUCT.CATEGORY },
-        { Value : GROSS_AMOUNT },
-        { Value : CURRENCY_code }
-    ]
+    UI.HeaderInfo: {
+        TypeName      : 'Purchase Item',
+        TypeNamePlural: 'Purchase Items',
+        Title         : { Value: PRODUCT.DESCRIPTION },
+        Description   : { Value: PO_ITEM_POS }
+    },
+
+    UI.LineItem  : [
+        { Value: PO_ITEM_POS },
+        { Value: PRODUCT.PRODUCT_ID },
+        { Value: PRODUCT.DESCRIPTION },
+        { Value: PRODUCT.CATEGORY },
+        { Value: GROSS_AMOUNT },
+        { Value: CURRENCY_code }
+    ],
+
+    UI.Facets    : [
+        {
+            $Type : 'UI.ReferenceFacet',
+            ID    : 'ItemInfo',
+            Label : 'Item Details',
+            Target: '@UI.FieldGroup#ItemInfo'
+        }
+    ],
+
+    UI.FieldGroup #ItemInfo: {
+        Data: [
+            { Value: PO_ITEM_POS },
+            { Value: PRODUCT.PRODUCT_ID },
+            { Value: PRODUCT.DESCRIPTION },
+            { Value: PRODUCT.CATEGORY },
+            { Value: GROSS_AMOUNT },
+            { Value: NET_AMOUNT },
+            { Value: TAX_AMOUNT },
+            { Value: CURRENCY_code }
+        ]
+    }
 );
 
 annotate service.PurchaseItemSrv with {
-    PO_ITEM_POS  @title : 'Item Position';
-    GROSS_AMOUNT @title : 'Gross Amount';
+    PO_ITEM_POS @title: '{i18n>PO_ITEMS_POS}';
+    NODE_KEY    @UI.Hidden;
 };
 
-annotate service.ProductSrv with {
-    PRODUCT_ID  @title : 'Product ID';
-    DESCRIPTION @title : 'Description';
-    CATEGORY    @title : 'Category';
+// ==================================================
+// EMPLOYEE - field labels (class version)
+// ==================================================
+
+annotate service.EmployeeSrv with {
+    ID            @title: '{i18n>EMPLOYEE_ID}';
+    nameFirst     @title: '{i18n>FIRST_NAME}';
+    nameLast      @title: '{i18n>LAST_NAME}';
+    email         @title: '{i18n>EMAIL}';
+    accountNumber @title: '{i18n>ACCOUNT_NUMBER}';
+    bankId        @title: '{i18n>BANK_ID}';
+    bankName      @title: '{i18n>BANK_NAME}';
+    language      @title: '{i18n>LANGUAGE}';
+    gender        @title: '{i18n>GENDER}';
+    loginName     @title: '{i18n>LOGIN_NAME}';
+    Currency      @title: '{i18n>CURRENCY}';
 };
 
 // ==================================================

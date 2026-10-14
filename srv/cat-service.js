@@ -158,7 +158,9 @@ export default cds.service.impl(async function () {
             salaryAmount: employee.salaryAmount
         });
 
-        return 'Employee created successfully';
+        return await SELECT
+            .from(EmployeeSrv)
+            .where({ ID: employee.ID });
 
     });
 
@@ -284,10 +286,6 @@ export default cds.service.impl(async function () {
             .limit(10);
 
     });
-
-    // ==================================================
-    // TOP 20 PRODUCTS
-    // ==================================================
 
     // ==================================================
     // TOP 20 PRODUCTS
@@ -428,6 +426,171 @@ export default cds.service.impl(async function () {
             .where({
                 NODE_KEY: key
             });
+
+    });
+
+    // ==================================================
+    // CREATE ADDRESS (class version)
+    // ==================================================
+
+    this.on('createAddressSrv', async (req) => {
+
+        const address = { ...req.data, NODE_KEY: req.data.NODE_KEY || randomUUID() };
+
+        await INSERT.into(AddressSrv)
+            .entries(address);
+
+        return await SELECT
+            .from(AddressSrv)
+            .where({ NODE_KEY: address.NODE_KEY });
+
+    });
+
+    // ==================================================
+    // CREATE PRODUCT
+    // ==================================================
+
+    this.on('createProduct', async (req) => {
+
+        const product = { ...req.data, NODE_KEY: req.data.NODE_KEY || randomUUID() };
+
+        await INSERT.into(ProductSrv)
+            .entries(product);
+
+        return await SELECT
+            .from(ProductSrv)
+            .where({ NODE_KEY: product.NODE_KEY });
+
+    });
+
+    // ==================================================
+    // UPDATE PRODUCT PRICE
+    // ==================================================
+
+    this.on('updateProductPrice', async (req) => {
+
+        const { NODE_KEY, PRICE } = req.data;
+
+        await UPDATE(ProductSrv)
+            .set({ PRICE })
+            .where({ NODE_KEY });
+
+        return 'Product price updated successfully';
+
+    });
+
+    // ==================================================
+    // HIGHEST PRICED PRODUCT (class version)
+    // ==================================================
+
+    this.on('getHeighestPricedProduct', async () => {
+
+        return await SELECT
+            .from(ProductSrv)
+            .orderBy('PRICE desc')
+            .limit(1);
+
+    });
+
+    // ==================================================
+    // PRODUCT PRICE +10% (class version) / TOP 20
+    // ==================================================
+
+    this.on('increasePrice', ProductSrv, async (req) => {
+
+        const key = req.params[0].NODE_KEY;
+
+        await UPDATE(ProductSrv)
+            .set({ PRICE: { '*=': 1.10 } })
+            .where({ NODE_KEY: key });
+
+        return await SELECT
+            .from(ProductSrv)
+            .where({ NODE_KEY: key });
+
+    });
+
+    this.on('top_20_product', ProductSrv, async () => {
+
+        return await SELECT
+            .from(ProductSrv)
+            .orderBy('PRICE desc')
+            .limit(20);
+
+    });
+
+    // ==================================================
+    // EMPLOYEE SALARY +15% (class version) / TOP 20
+    // ==================================================
+
+    this.on('increaseSalary', EmployeeSrv, async (req) => {
+
+        const key = req.params[0].ID;
+
+        await UPDATE(EmployeeSrv)
+            .set({ salaryAmount: { '*=': 1.15 } })
+            .where({ ID: key });
+
+        return await SELECT
+            .from(EmployeeSrv)
+            .where({ ID: key });
+
+    });
+
+    this.on('Top20PaidEmployee', EmployeeSrv, async () => {
+
+        return await SELECT
+            .from(EmployeeSrv)
+            .orderBy('salaryAmount desc')
+            .limit(20);
+
+    });
+
+    // ==================================================
+    // PURCHASE ORDER DISCOUNT -1000 (class version)
+    // ==================================================
+
+    this.on('discountPrice', PurchaseOrderSrv, async (req) => {
+
+        const key = req.params[0].NODE_KEY;
+
+        const order = await SELECT.one
+            .from(PurchaseOrders)
+            .where({ NODE_KEY: key });
+
+        if (!order) {
+            return req.reject(404, 'Purchase order not found');
+        }
+
+        if (Number(order.GROSS_AMOUNT) < 1000) {
+            return req.reject(400, 'Gross amount is below 1000, discount not possible');
+        }
+
+        // PurchaseOrderSrv is a join view, so update the underlying table
+        await UPDATE(PurchaseOrders)
+            .set({
+                GROSS_AMOUNT: { '-=': 1000 },
+                NET_AMOUNT: { '-=': 800 },
+                TAX_AMOUNT: { '-=': 200 }
+            })
+            .where({ NODE_KEY: key });
+
+        return await SELECT
+            .from(PurchaseOrderSrv)
+            .where({ NODE_KEY: key });
+
+    });
+
+    // ==================================================
+    // LARGEST ORDERS (top 5 by gross amount)
+    // ==================================================
+
+    this.on('largestOrder', PurchaseOrderSrv, async () => {
+
+        return await SELECT
+            .from(PurchaseOrderSrv)
+            .orderBy('GROSS_AMOUNT desc')
+            .limit(5);
 
     });
 
