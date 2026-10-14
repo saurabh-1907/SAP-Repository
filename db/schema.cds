@@ -106,3 +106,9 @@ entity Countries {
     key code    : String(2);
     description : String(200);
 }
+
+// Business partner role texts (BP_ROLE 1-4)
+entity BPRoleFltr {
+    key code        : Integer     @(title: '{i18n>BP_ROLE}');
+        description : String(80)  @(title: '{i18n>BP_ROLE}');
+}

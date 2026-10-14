@@ -88,6 +88,9 @@ service CatalogService {
         inner join database.Countries as country
             on addr.COUNTRY = country.code
 
+        inner join database.BPRoleFltr as role
+            on bp.BP_ROLE = role.code
+
         {
             key po.NODE_KEY,
 
@@ -99,7 +102,7 @@ service CatalogService {
 
                 bp.COMPANY_NAME,
                 bp.BP_ID,
-                bp.BP_ROLE,
+                role.description as BP_ROLE,
                 bp.MOBILE,
                 bp.FAX,
                 bp.EMAIL,
