@@ -18,6 +18,8 @@ context master {
         BP_ID        : common.Guid;
         COMPANY_NAME : common.String255;
 
+        ADDRESS : Association to one Addresses;
+
         AD : Association to many Addresses
              on AD.BP = $self;
     }
@@ -90,7 +92,7 @@ context transaction {
 
         key NODE_KEY : common.Guid;
 
-        PO_ID : common.Guid;
+        PO_ID : String(36);
 
         PARTNER : Association to master.BusinessPartners;
 

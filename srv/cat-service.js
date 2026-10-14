@@ -15,6 +15,8 @@ export default cds.service.impl(async function () {
         PurchaseItemSrv
     } = this.entities;
 
+    const { PurchaseOrders } = cds.entities('poapplication.db.transaction');
+
     // ==================================================
     // PURCHASE ITEM VALIDATION
     // ==================================================
@@ -381,6 +383,51 @@ export default cds.service.impl(async function () {
             });
 
         return `Salary increased from ${oldSalary} to ${newSalary}`;
+
+    });
+
+    // ==================================================
+    // PURCHASE ORDER DISCOUNT -10%
+    // ==================================================
+
+    this.on('discount', PurchaseOrderSrv, async (req) => {
+
+        const key = req.params[0].NODE_KEY;
+
+        const order = await SELECT.one
+            .from(PurchaseOrderSrv)
+            .where({
+                NODE_KEY: key
+            });
+
+        if (!order) {
+
+            return req.reject(
+                404,
+                'Purchase order not found'
+            );
+
+        }
+
+        const discounted = (amount) => Number(
+            (Number(amount) * 0.90).toFixed(2)
+        );
+
+        await UPDATE(PurchaseOrders)
+            .set({
+                GROSS_AMOUNT: discounted(order.GROSS_AMOUNT),
+                NET_AMOUNT: discounted(order.NET_AMOUNT),
+                TAX_AMOUNT: discounted(order.TAX_AMOUNT)
+            })
+            .where({
+                NODE_KEY: key
+            });
+
+        return await SELECT.one
+            .from(PurchaseOrderSrv)
+            .where({
+                NODE_KEY: key
+            });
 
     });
 
