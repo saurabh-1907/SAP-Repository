@@ -295,3 +295,12 @@ service CatalogService {
 
     function getUtilities() returns String;
 }
+
+// The amount type in db/common.cds points to 'CURRENCY_CODE', but the field
+// generated from `CURRENCY : Currency` is CURRENCY_code. Totals ($apply,
+// used by the item chart) need the correct name.
+annotate CatalogService.PurchaseItemSrv with {
+    GROSS_AMOUNT @Semantics.amount.currencyCode: 'CURRENCY_code';
+    NET_AMOUNT   @Semantics.amount.currencyCode: 'CURRENCY_code';
+    TAX_AMOUNT   @Semantics.amount.currencyCode: 'CURRENCY_code';
+};

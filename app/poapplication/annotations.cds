@@ -136,6 +136,12 @@ annotate service.PurchaseOrderSrv with @(
 
     UI.Facets                : [
         {
+            $Type : 'UI.ReferenceFacet',
+            ID    : 'ItemGrossChart',
+            Label : 'Gross Amount per Item',
+            Target: 'Items/@UI.Chart'
+        },
+        {
             $Type : 'UI.CollectionFacet',
             ID    : 'OtherDetails',
             Label : 'Other details',
@@ -271,6 +277,48 @@ annotate service.PurchaseItemSrv with @(
             { Value: NET_AMOUNT },
             { Value: TAX_AMOUNT },
             { Value: CURRENCY_code }
+        ]
+    }
+);
+
+// Chart: gross amount per purchase item (shown on the PO object page)
+annotate service.PurchaseItemSrv with @(
+    Aggregation.ApplySupported : {
+        Transformations       : [
+            'aggregate',
+            'groupby',
+            'filter',
+            'orderby',
+            'top',
+            'skip'
+        ],
+        GroupableProperties   : [
+            PO_ITEM_POS,
+            PRODUCT_NODE_KEY,
+            CURRENCY_code
+        ],
+        AggregatableProperties: [
+            { Property: GROSS_AMOUNT }
+        ]
+    },
+
+    Analytics.AggregatedProperty #sumGross : {
+        Name                 : 'sumGross',
+        AggregationMethod    : 'sum',
+        AggregatableProperty : GROSS_AMOUNT,
+        ![@Common.Label]     : 'Gross Amount'
+    },
+
+    UI.Chart : {
+        Title              : 'Gross Amount per Item',
+        ChartType          : #Column,
+        Dimensions         : [ PO_ITEM_POS ],
+        DimensionAttributes: [
+            { Dimension: PO_ITEM_POS, Role: #Category }
+        ],
+        DynamicMeasures    : [ '@Analytics.AggregatedProperty#sumGross' ],
+        MeasureAttributes  : [
+            { DynamicMeasure: '@Analytics.AggregatedProperty#sumGross', Role: #Axis1 }
         ]
     }
 );
