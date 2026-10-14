@@ -22,20 +22,36 @@ sap.ui.define([
     "use strict";
 
     function journey() {
-        QUnit.module("EmployeeSrvObjectPageObjectPage journey");
+        QUnit.module("PurchaseOrderSrvListListReport journey");
 
-        opaTest("Navigate to EmployeeSrvObjectPageObjectPage", function (Given, When, Then) {
+        const defaultTableId = "";
+
+        opaTest("Start application", function (Given, When, Then) {
             Given.iStartMyApp();
-            When.onTheEmployeeSrvListGenerated.onFilterBar().iExecuteSearch();
-            Then.onTheEmployeeSrvListGenerated.onTable().iCheckRows();
-            When.onTheEmployeeSrvListGenerated.onTable().iPressRow(0);
 
-            Then.onTheEmployeeSrvObjectPageGenerated.iSeeThisPage();
+            Then.onThePurchaseOrderSrvListGenerated.iSeeThisPage();
         });
 
 
+        // Note: this test will only work if the ListReport page has a search field and shows data that matches the search term. Please ensure that the test data and search term are set up accordingly.
+        // opaTest("Perform a global search and check the result", function (Given, When, Then) {
+        //     When.onThePurchaseOrderSrvListGenerated.onFilterBar().iChangeSearchField("Search Term");
+        //     When.onThePurchaseOrderSrvListGenerated.onFilterBar().iExecuteSearch();
+        //     Then.onThePurchaseOrderSrvListGenerated.onTable(defaultTableId).iCheckRows();
+        //     When.onThePurchaseOrderSrvListGenerated.onFilterBar().iChangeSearchField(undefined);
+        //     Then.onThePurchaseOrderSrvListGenerated.onFilterBar().iCheckSearchField(undefined);
+        // });
 
-        opaTest("Teardown", function (Given, When, Then) { 
+
+        opaTest("Navigate to ObjectPage", function (Given, When, Then) {
+            // Note: this test will fail if the ListReport page doesn't show any data
+            When.onThePurchaseOrderSrvListGenerated.onFilterBar().iExecuteSearch();
+            Then.onThePurchaseOrderSrvListGenerated.onTable(defaultTableId).iCheckRows();
+            When.onThePurchaseOrderSrvListGenerated.onTable(defaultTableId).iPressRow(0);
+            Then.onThePurchaseOrderSrvObjectPageGenerated.iSeeThisPage();
+        });
+
+        opaTest("Teardown", function (Given, When, Then) {
             // Cleanup
             Given.iTearDownMyApp();
         });

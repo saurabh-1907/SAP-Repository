@@ -85,28 +85,28 @@
       "routes": [
         {
           "pattern": ":?query:",
-          "name": "EmployeeSrvList",
-          "target": "EmployeeSrvList"
+          "name": "PurchaseOrderSrvList",
+          "target": "PurchaseOrderSrvList"
         },
         {
-          "pattern": "EmployeeSrv({key}):?query:",
-          "name": "EmployeeSrvObjectPage",
-          "target": "EmployeeSrvObjectPage"
+          "pattern": "PurchaseOrderSrv({key}):?query:",
+          "name": "PurchaseOrderSrvObjectPage",
+          "target": "PurchaseOrderSrvObjectPage"
         }
       ],
       "targets": {
-        "EmployeeSrvList": {
+        "PurchaseOrderSrvList": {
           "type": "Component",
-          "id": "EmployeeSrvList",
+          "id": "PurchaseOrderSrvList",
           "name": "sap.fe.templates.ListReport",
           "options": {
             "settings": {
-              "contextPath": "/EmployeeSrv",
+              "contextPath": "/PurchaseOrderSrv",
               "variantManagement": "Page",
               "navigation": {
-                "EmployeeSrv": {
+                "PurchaseOrderSrv": {
                   "detail": {
-                    "route": "EmployeeSrvObjectPage"
+                    "route": "PurchaseOrderSrvObjectPage"
                   }
                 }
               },
@@ -120,14 +120,14 @@
             }
           }
         },
-        "EmployeeSrvObjectPage": {
+        "PurchaseOrderSrvObjectPage": {
           "type": "Component",
-          "id": "EmployeeSrvObjectPage",
+          "id": "PurchaseOrderSrvObjectPage",
           "name": "sap.fe.templates.ObjectPage",
           "options": {
             "settings": {
               "editableHeaderContent": false,
-              "contextPath": "/EmployeeSrv"
+              "contextPath": "/PurchaseOrderSrv"
             }
           }
         }
