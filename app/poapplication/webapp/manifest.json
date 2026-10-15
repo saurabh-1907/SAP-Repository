@@ -78,7 +78,11 @@
       }
     },
     "resources": {
-      "css": []
+      "css": [
+        {
+          "uri": "css/hideAdaptFilters.css"
+        }
+      ]
     },
     "routing": {
       "config": {},

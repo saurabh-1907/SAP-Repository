@@ -1,0 +1,5 @@
+/* Hide the "Adapt Filters" button of the Purchase Order list report filter bar.
+   Fiori elements V4 has no manifest setting for it; the button's ID ends in -btnAdapt. */
+[id$="fe::FilterBar::PurchaseOrderSrv-btnAdapt"] {
+    display: none !important;
+}
