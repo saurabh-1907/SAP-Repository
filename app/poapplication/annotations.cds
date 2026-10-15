@@ -16,10 +16,6 @@ annotate service.PurchaseOrderSrv with {
                         $Type            : 'Common.ValueListParameterOut',
                         LocalDataProperty: 'PO_ID',
                         ValueListProperty: 'PO_ID'
-                    },
-                    {
-                        $Type            : 'Common.ValueListParameterDisplayOnly',
-                        ValueListProperty: 'COMPANY_NAME'
                     }
                 ]
             }
