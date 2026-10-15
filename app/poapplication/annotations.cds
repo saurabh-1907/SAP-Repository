@@ -1,6 +1,35 @@
 using CatalogService as service from '../../srv/cat-service';
 
 // ==================================================
+// VALUE HELP - Company Name filter shows a list of business partners
+// ==================================================
+
+annotate service.PurchaseOrderSrv with {
+    COMPANY_NAME @(
+        Common: {
+            Text     : COMPANY_NAME,
+            ValueList: {
+                Label         : 'Company Name',
+                CollectionPath: 'BusinessPartnerSrv',
+                SearchSupported: true,
+                Parameters    : [
+                    {
+                        $Type            : 'Common.ValueListParameterOut',
+                        LocalDataProperty: 'BP_ID',
+                        ValueListProperty: 'BP_ID'
+                    },
+                    {
+                        $Type            : 'Common.ValueListParameterOut',
+                        LocalDataProperty: 'COMPANY_NAME',
+                        ValueListProperty: 'COMPANY_NAME'
+                    }
+                ]
+            }
+        }
+    )
+};
+
+// ==================================================
 // PURCHASE ORDER - LIST REPORT
 // ==================================================
 
@@ -9,8 +38,8 @@ annotate service.PurchaseOrderSrv with @(
     UI.SelectionFields       : [
         PO_ID,
         COMPANY_NAME,
-        OSC,
-        LSC,
+        LSTEXT,
+        OSTEXT,
         partnerCountryDesc
     ],
 
