@@ -9,7 +9,8 @@ annotate service.PurchaseOrderSrv with @(
     UI.SelectionFields       : [
         PO_ID,
         COMPANY_NAME,
-        GROSS_AMOUNT,
+        OSC,
+        LSC,
         partnerCountryDesc
     ],
 
