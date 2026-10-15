@@ -57,6 +57,11 @@ service CatalogService {
     entity AddressSrv
     as projection on database.master.Addresses;
 
+    // One row per country (key: code) - value help for the Country filter
+    @readonly
+    entity CountrySrv
+    as projection on database.Countries;
+
     // ==================================================
     // TRANSACTION DATA
     // ==================================================

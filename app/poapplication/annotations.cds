@@ -1,7 +1,7 @@
 using CatalogService as service from '../../srv/cat-service';
 
 // ==================================================
-// VALUE HELP - PO ID and Company Name filters show a list to pick from
+// VALUE HELP - PO ID, Country and Company Name filters show a list to pick from
 // ==================================================
 
 annotate service.PurchaseOrderSrv with {
@@ -20,6 +20,27 @@ annotate service.PurchaseOrderSrv with {
                     {
                         $Type            : 'Common.ValueListParameterDisplayOnly',
                         ValueListProperty: 'COMPANY_NAME'
+                    }
+                ]
+            }
+        }
+    );
+
+    partnerCountryDesc @(
+        Common: {
+            ValueList: {
+                Label          : 'Country',
+                CollectionPath : 'CountrySrv',
+                SearchSupported: true,
+                Parameters     : [
+                    {
+                        $Type            : 'Common.ValueListParameterOut',
+                        LocalDataProperty: 'partnerCountryDesc',
+                        ValueListProperty: 'description'
+                    },
+                    {
+                        $Type            : 'Common.ValueListParameterDisplayOnly',
+                        ValueListProperty: 'code'
                     }
                 ]
             }
@@ -514,3 +535,9 @@ annotate service.EmployeeSrv with @(
     ],
 );
 
+
+// Labels for the Country value help
+annotate service.CountrySrv with {
+    code        @title: 'Country Code';
+    description @title: '{i18n>COUNTRY}';
+};
