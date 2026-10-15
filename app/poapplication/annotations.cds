@@ -1,7 +1,7 @@
 using CatalogService as service from '../../srv/cat-service';
 
 // ==================================================
-// VALUE HELP - PO ID, Country and Company Name filters show a list to pick from
+// VALUE HELP - PO ID, status, Country and Company Name filters show a list to pick from
 // ==================================================
 
 annotate service.PurchaseOrderSrv with {
@@ -26,11 +26,45 @@ annotate service.PurchaseOrderSrv with {
         }
     );
 
+    LSTEXT @(
+        Common: {
+            ValueList: {
+                Label          : 'Life Cycle Status',
+                CollectionPath : 'LifeCycleStatusSrv',
+                SearchSupported: true,
+                Parameters     : [
+                    {
+                        $Type            : 'Common.ValueListParameterOut',
+                        LocalDataProperty: 'LSTEXT',
+                        ValueListProperty: 'LSTEXT'
+                    }
+                ]
+            }
+        }
+    );
+
+    OSTEXT @(
+        Common: {
+            ValueList: {
+                Label          : 'Overall Status',
+                CollectionPath : 'OverallStatusSrv',
+                SearchSupported: true,
+                Parameters     : [
+                    {
+                        $Type            : 'Common.ValueListParameterOut',
+                        LocalDataProperty: 'OSTEXT',
+                        ValueListProperty: 'OSTEXT'
+                    }
+                ]
+            }
+        }
+    );
+
     partnerCountryDesc @(
         Common: {
             ValueList: {
                 Label          : 'Country',
-                CollectionPath : 'CountrySrv',
+                CollectionPath : 'CountriesSrv',
                 SearchSupported: true,
                 Parameters     : [
                     {
@@ -113,6 +147,10 @@ annotate service.PurchaseOrderSrv with @(
         {
             $Type: 'UI.DataField',
             Value: CURRENCY_code
+        },
+        {
+            $Type: 'UI.DataField',
+            Value: CITY
         },
         {
             $Type      : 'UI.DataField',
@@ -265,7 +303,7 @@ annotate service.PurchaseOrderSrv with @(
         Data: [
             {
                 $Type: 'UI.DataField',
-                Value: COMPANY_NAME
+                Value: STREET
             },
             {
                 $Type: 'UI.DataField',
@@ -273,11 +311,15 @@ annotate service.PurchaseOrderSrv with @(
             },
             {
                 $Type: 'UI.DataField',
-                Value: STREET
+                Value: CITY
             },
             {
                 $Type: 'UI.DataField',
-                Value: CITY
+                Value: POSTAL_CODE
+            },
+            {
+                $Type: 'UI.DataField',
+                Value: partnerCountryDesc
             }
         ]
     }
@@ -295,16 +337,9 @@ annotate service.PurchaseOrderSrv with {
 // ==================================================
 
 annotate service.PurchaseItemSrv with @(
-    UI.HeaderInfo: {
-        TypeName      : 'Purchase Item',
-        TypeNamePlural: 'Purchase Items',
-        Title         : { Value: PRODUCT.DESCRIPTION },
-        Description   : { Value: PO_ITEM_POS }
-    },
-
     UI.SelectionFields : [
         PO_ITEM_POS,
-        PRODUCT_NODE_KEY
+        PRODUCT.DESCRIPTION
     ],
 
     UI.LineItem  : [
@@ -330,25 +365,57 @@ annotate service.PurchaseItemSrv with @(
         }
     ],
 
+    UI.HeaderInfo: {
+        TypeName      : 'Purchase Item',
+        TypeNamePlural: 'Purchase Items',
+        Title         : {
+            $Type: 'UI.DataField',
+            Value: PO_ITEM_POS
+        },
+        Description   : {
+            $Type: 'UI.DataField',
+            Value: PRODUCT.DESCRIPTION
+        }
+    },
+
     UI.Facets    : [
         {
-            $Type : 'UI.ReferenceFacet',
-            ID    : 'ItemInfo',
-            Label : 'Item Details',
-            Target: '@UI.FieldGroup#ItemInfo'
+            $Type : 'UI.CollectionFacet',
+            Label : 'Product Details',
+            Facets: [
+                {
+                    $Type : 'UI.ReferenceFacet',
+                    Label : 'Product Information',
+                    Target: '@UI.FieldGroup#ProductInfo'
+                },
+                {
+                    $Type : 'UI.ReferenceFacet',
+                    Label : 'Product Supplier Information',
+                    Target: '@UI.FieldGroup#ProductItemInfo'
+                }
+            ]
         }
     ],
 
-    UI.FieldGroup #ItemInfo: {
+    UI.FieldGroup #ProductInfo    : {
         Data: [
-            { Value: PO_ITEM_POS },
-            { Value: PRODUCT.PRODUCT_ID },
-            { Value: PRODUCT.DESCRIPTION },
-            { Value: PRODUCT.CATEGORY },
-            { Value: GROSS_AMOUNT },
-            { Value: NET_AMOUNT },
-            { Value: TAX_AMOUNT },
-            { Value: CURRENCY_code }
+            { $Type: 'UI.DataField', Value: PRODUCT.DESCRIPTION },
+            { $Type: 'UI.DataField', Value: PRODUCT.DEPTH },
+            { $Type: 'UI.DataField', Value: PRODUCT.WIDTH },
+            { $Type: 'UI.DataField', Value: PRODUCT.HEIGHT },
+            { $Type: 'UI.DataField', Value: PRODUCT.PRICE },
+            { $Type: 'UI.DataField', Value: PRODUCT.CATEGORY },
+            { $Type: 'UI.DataField', Value: PRODUCT.MEASURE_UNIT },
+            { $Type: 'UI.DataField', Value: PRODUCT.CURRENCY_CODE }
+        ]
+    },
+
+    UI.FieldGroup #ProductItemInfo: {
+        Data: [
+            { $Type: 'UI.DataField', Value: CURRENCY_code },
+            { $Type: 'UI.DataField', Value: GROSS_AMOUNT },
+            { $Type: 'UI.DataField', Value: NET_AMOUNT },
+            { $Type: 'UI.DataField', Value: TAX_AMOUNT }
         ]
     }
 );
@@ -537,7 +604,7 @@ annotate service.EmployeeSrv with @(
 
 
 // Labels for the Country value help
-annotate service.CountrySrv with {
+annotate service.CountriesSrv with {
     code        @title: 'Country Code';
     description @title: '{i18n>COUNTRY}';
 };

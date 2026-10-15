@@ -59,7 +59,7 @@ service CatalogService {
 
     // One row per country (key: code) - value help for the Country filter
     @readonly
-    entity CountrySrv
+    entity CountriesSrv
     as projection on database.Countries;
 
     // ==================================================
@@ -198,6 +198,17 @@ service CatalogService {
 
     entity PurchaseItemSrv
     as projection on database.transaction.PurchaseItems;
+
+    // One row per status text - value helps for the status filters
+    @readonly
+    entity LifeCycleStatusSrv as select from PurchaseOrderSrv distinct {
+        key LSTEXT
+    };
+
+    @readonly
+    entity OverallStatusSrv as select from PurchaseOrderSrv distinct {
+        key OSTEXT
+    };
 
     // ==================================================
     // UNBOUND ACTIONS
