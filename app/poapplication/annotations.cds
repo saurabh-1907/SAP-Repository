@@ -1,10 +1,31 @@
 using CatalogService as service from '../../srv/cat-service';
 
 // ==================================================
-// VALUE HELP - Company Name filter shows a list of business partners
+// VALUE HELP - PO ID and Company Name filters show a list to pick from
 // ==================================================
 
 annotate service.PurchaseOrderSrv with {
+    PO_ID @(
+        Common: {
+            ValueList: {
+                Label          : 'Purchase Order ID',
+                CollectionPath : 'PurchaseOrderSrv',
+                SearchSupported: true,
+                Parameters     : [
+                    {
+                        $Type            : 'Common.ValueListParameterOut',
+                        LocalDataProperty: 'PO_ID',
+                        ValueListProperty: 'PO_ID'
+                    },
+                    {
+                        $Type            : 'Common.ValueListParameterDisplayOnly',
+                        ValueListProperty: 'COMPANY_NAME'
+                    }
+                ]
+            }
+        }
+    );
+
     COMPANY_NAME @(
         Common: {
             Text     : COMPANY_NAME,
