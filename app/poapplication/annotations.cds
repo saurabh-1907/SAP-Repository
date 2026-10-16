@@ -133,27 +133,6 @@ annotate service.PurchaseOrderSrv with @(UI.Chart: {
     }]
 });
 
-// Lets the status chart aggregate: count orders (PO_ID) per LSC / OSC
-annotate service.PurchaseOrderSrv with @(
-    Aggregation.ApplySupported      : {
-        Transformations       : [
-            'aggregate',
-            'groupby',
-            'filter'
-        ],
-        GroupableProperties   : [
-            LSC,
-            OSC,
-            LSTEXT,
-            OSTEXT
-        ],
-        AggregatableProperties: [{Property: PO_ID}]
-    },
-    Aggregation.CustomAggregate #PO_ID: 'Edm.Int32'
-) {
-    PO_ID @Aggregation.default: #COUNT_DISTINCT;
-};
-
 // ==================================================
 // PURCHASE ORDER - LIST REPORT
 // ==================================================
