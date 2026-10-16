@@ -105,6 +105,34 @@ annotate service.PurchaseOrderSrv with {
     )
 };
 
+annotate service.PurchaseOrderSrv with @(UI.Chart: {
+    Title              : 'Status of the order',
+    Description        : 'Overall lifecycle status of the order',
+    ChartType          : #Column,
+    Dimensions         : [
+        LSC,
+        OSC
+    ],
+    Measures           : [PO_ID],
+    DimensionAttributes: [
+        {
+            $Type    : 'UI.ChartDimensionAttributeType',
+            Dimension: LSC,
+            Role     : #Category
+        },
+        {
+            $Type    : 'UI.ChartDimensionAttributeType',
+            Dimension: OSC,
+            Role     : #Series
+        }
+    ],
+    MeasureAttributes  : [{
+        $Type  : 'UI.ChartMeasureAttributeType',
+        Measure: PO_ID,
+        Role   : #Axis1
+    }]
+});
+
 // ==================================================
 // PURCHASE ORDER - LIST REPORT
 // ==================================================
@@ -246,12 +274,6 @@ annotate service.PurchaseOrderSrv with @(
 
     UI.Facets                : [
         {
-            $Type : 'UI.ReferenceFacet',
-            ID    : 'ItemGrossChart',
-            Label : 'Gross Amount per Item',
-            Target: 'Items/@UI.Chart'
-        },
-        {
             $Type : 'UI.CollectionFacet',
             ID    : 'OtherDetails',
             Label : 'Other details',
@@ -269,6 +291,11 @@ annotate service.PurchaseOrderSrv with @(
                     Target: '@UI.FieldGroup#BPAddrInfo'
                 }
             ]
+        },
+        {
+            $Type : 'UI.ReferenceFacet',
+            Label : 'Status Overview',
+            Target: '@UI.Chart'
         },
         {
             $Type : 'UI.ReferenceFacet',
@@ -416,48 +443,6 @@ annotate service.PurchaseItemSrv with @(
             { $Type: 'UI.DataField', Value: GROSS_AMOUNT },
             { $Type: 'UI.DataField', Value: NET_AMOUNT },
             { $Type: 'UI.DataField', Value: TAX_AMOUNT }
-        ]
-    }
-);
-
-// Chart: gross amount per purchase item (shown on the PO object page)
-annotate service.PurchaseItemSrv with @(
-    Aggregation.ApplySupported : {
-        Transformations       : [
-            'aggregate',
-            'groupby',
-            'filter',
-            'orderby',
-            'top',
-            'skip'
-        ],
-        GroupableProperties   : [
-            PO_ITEM_POS,
-            PRODUCT_NODE_KEY,
-            CURRENCY_code
-        ],
-        AggregatableProperties: [
-            { Property: GROSS_AMOUNT }
-        ]
-    },
-
-    Analytics.AggregatedProperty #sumGross : {
-        Name                 : 'sumGross',
-        AggregationMethod    : 'sum',
-        AggregatableProperty : GROSS_AMOUNT,
-        ![@Common.Label]     : 'Gross Amount'
-    },
-
-    UI.Chart : {
-        Title              : 'Gross Amount per Item',
-        ChartType          : #Column,
-        Dimensions         : [ PO_ITEM_POS ],
-        DimensionAttributes: [
-            { Dimension: PO_ITEM_POS, Role: #Category }
-        ],
-        DynamicMeasures    : [ '@Analytics.AggregatedProperty#sumGross' ],
-        MeasureAttributes  : [
-            { DynamicMeasure: '@Analytics.AggregatedProperty#sumGross', Role: #Axis1 }
         ]
     }
 );
