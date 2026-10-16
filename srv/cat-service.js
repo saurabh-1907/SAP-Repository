@@ -706,6 +706,110 @@ export default cds.service.impl(async function () {
     });
 
     // ==================================================
+    // CREATE / EDIT / DELETE PURCHASE ITEM (Purchase Item Details table)
+    // Called through the order: PurchaseOrderSrv(<order>)/Items/...
+    // ==================================================
+
+    const { Products } = cds.entities('poapplication.db.master');
+
+    const checkProduct = async (req, PRODUCT_NODE_KEY) => {
+        const product = await SELECT.one
+            .from(Products)
+            .where({ NODE_KEY: PRODUCT_NODE_KEY });
+        if (!product) {
+            req.reject(400, `Product ${PRODUCT_NODE_KEY} not found`);
+        }
+    };
+
+    this.on('createPurchaseItem', PurchaseItemSrv, async (req) => {
+
+        const orderKey = req.params[0]?.NODE_KEY;
+        const { PRODUCT_NODE_KEY, GROSS_AMOUNT, NET_AMOUNT, TAX_AMOUNT } = req.data;
+
+        if (!orderKey) {
+            return req.reject(400, 'Open a purchase order to add an item');
+        }
+
+        const order = await SELECT.one
+            .from(PurchaseOrders)
+            .where({ NODE_KEY: orderKey });
+
+        if (!order) {
+            return req.reject(404, 'Purchase order not found');
+        }
+
+        checkAmounts(req, req.data);
+        await checkProduct(req, PRODUCT_NODE_KEY);
+
+        // Next position: 10, 20, 30, ...
+        const last = await SELECT.one
+            .from(PurchaseItems)
+            .columns('max(PO_ITEM_POS) as maxPos')
+            .where({ PARENT_NODE_KEY: orderKey });
+
+        const NODE_KEY = randomUUID();
+
+        await INSERT.into(PurchaseItems).entries({
+            NODE_KEY,
+            PARENT_NODE_KEY: orderKey,
+            PO_ITEM_POS: (last?.maxPos || 0) + 10,
+            PRODUCT_NODE_KEY,
+            GROSS_AMOUNT,
+            NET_AMOUNT,
+            TAX_AMOUNT,
+            CURRENCY_code: order.CURRENCY_code
+        });
+
+        return await SELECT.one
+            .from(PurchaseItemSrv)
+            .where({ NODE_KEY });
+
+    });
+
+    this.on('editPurchaseItem', PurchaseItemSrv, async (req) => {
+
+        const key = req.params.at(-1).NODE_KEY;
+        const { PRODUCT_NODE_KEY, GROSS_AMOUNT, NET_AMOUNT, TAX_AMOUNT } = req.data;
+
+        checkAmounts(req, req.data);
+        if (PRODUCT_NODE_KEY) {
+            await checkProduct(req, PRODUCT_NODE_KEY);
+        }
+
+        // Only change what was filled in
+        const changes = Object.fromEntries(
+            Object.entries({ PRODUCT_NODE_KEY, GROSS_AMOUNT, NET_AMOUNT, TAX_AMOUNT })
+                .filter(([, value]) => value !== undefined && value !== null && value !== '')
+        );
+
+        const updated = await UPDATE(PurchaseItems)
+            .set(changes)
+            .where({ NODE_KEY: key });
+
+        if (!updated) {
+            return req.reject(404, 'Purchase item not found');
+        }
+
+        return await SELECT.one
+            .from(PurchaseItemSrv)
+            .where({ NODE_KEY: key });
+
+    });
+
+    this.on('deletePurchaseItem', PurchaseItemSrv, async (req) => {
+
+        const key = req.params.at(-1).NODE_KEY;
+
+        const deleted = await DELETE.from(PurchaseItems)
+            .where({ NODE_KEY: key });
+
+        if (!deleted) {
+            return req.reject(404, 'Purchase item not found');
+        }
+
+    });
+
+    // ==================================================
     // GET UTILITIES
     // ==================================================
 

@@ -231,7 +231,40 @@ service CatalogService {
         };
 
     entity PurchaseItemSrv
-    as projection on database.transaction.PurchaseItems;
+    as projection on database.transaction.PurchaseItems actions {
+
+        // ---------- Create / Edit / Delete (Purchase Item Details table) ----------
+
+        // Create: toolbar button of the items table on the order's page
+        @Common.SideEffects: {
+            TargetEntities: ['/CatalogService.EntityContainer/PurchaseOrderSrv']
+        }
+        action createPurchaseItem(
+            in               : many $self,
+            PRODUCT_NODE_KEY : String(36)     @title: '{i18n>PRODUCT_GUID}'  @mandatory,
+            GROSS_AMOUNT     : common.AmountT @title: '{i18n>GROSS_AMOUNT}'  @mandatory,
+            NET_AMOUNT       : common.AmountT @title: '{i18n>NET_AMOUNT}'    @mandatory,
+            TAX_AMOUNT       : common.AmountT @title: '{i18n>TAX_AMOUNT}'    @mandatory
+        ) returns PurchaseItemSrv;
+
+        // Edit: row button, dialog pre-filled with the item's values
+        @Common.SideEffects: {
+            TargetEntities: ['/CatalogService.EntityContainer/PurchaseOrderSrv']
+        }
+        action editPurchaseItem(
+            PRODUCT_NODE_KEY : String(36)     @title: '{i18n>PRODUCT_GUID}'  @UI.ParameterDefaultValue: in.PRODUCT_NODE_KEY,
+            GROSS_AMOUNT     : common.AmountT @title: '{i18n>GROSS_AMOUNT}'  @UI.ParameterDefaultValue: in.GROSS_AMOUNT,
+            NET_AMOUNT       : common.AmountT @title: '{i18n>NET_AMOUNT}'    @UI.ParameterDefaultValue: in.NET_AMOUNT,
+            TAX_AMOUNT       : common.AmountT @title: '{i18n>TAX_AMOUNT}'    @UI.ParameterDefaultValue: in.TAX_AMOUNT
+        ) returns PurchaseItemSrv;
+
+        // Delete: row button, asks for confirmation first
+        @Common.IsActionCritical: true
+        @Common.SideEffects: {
+            TargetEntities: ['/CatalogService.EntityContainer/PurchaseOrderSrv']
+        }
+        action deletePurchaseItem();
+    };
 
     // One row per status text - value helps for the status filters
     @readonly

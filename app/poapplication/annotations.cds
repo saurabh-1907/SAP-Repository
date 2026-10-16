@@ -364,6 +364,27 @@ annotate service.PurchaseItemSrv with @(
     ],
 
     UI.LineItem  : [
+        // Create / Edit / Delete with icons from the SAP Icon Explorer
+        {
+            $Type  : 'UI.DataFieldForAction',
+            Action : 'CatalogService.createPurchaseItem',
+            Label  : 'Create',
+            IconUrl: 'sap-icon://add'
+        },
+        {
+            $Type  : 'UI.DataFieldForAction',
+            Action : 'CatalogService.editPurchaseItem',
+            Label  : 'Edit',
+            IconUrl: 'sap-icon://edit',
+            Inline : true
+        },
+        {
+            $Type  : 'UI.DataFieldForAction',
+            Action : 'CatalogService.deletePurchaseItem',
+            Label  : 'Delete',
+            IconUrl: 'sap-icon://delete',
+            Inline : true
+        },
         {
             $Type: 'UI.DataField',
             Value: PO_ITEM_POS
@@ -650,5 +671,53 @@ annotate service.PurchaseOrderSrv with actions {
             ]
         }}),
         CURRENCY_code @UI.ParameterDefaultValue: 'EUR'
+    )
+};
+
+// Item dialogs: pick the product from a list
+annotate service.PurchaseItemSrv with actions {
+    createPurchaseItem(
+        PRODUCT_NODE_KEY @(Common: {ValueList: {
+            Label          : 'Product',
+            CollectionPath : 'ProductSrv',
+            SearchSupported: true,
+            Parameters     : [
+                {
+                    $Type            : 'Common.ValueListParameterOut',
+                    LocalDataProperty: 'PRODUCT_NODE_KEY',
+                    ValueListProperty: 'NODE_KEY'
+                },
+                {
+                    $Type            : 'Common.ValueListParameterDisplayOnly',
+                    ValueListProperty: 'PRODUCT_ID'
+                },
+                {
+                    $Type            : 'Common.ValueListParameterDisplayOnly',
+                    ValueListProperty: 'DESCRIPTION'
+                }
+            ]
+        }})
+    );
+    editPurchaseItem(
+        PRODUCT_NODE_KEY @(Common: {ValueList: {
+            Label          : 'Product',
+            CollectionPath : 'ProductSrv',
+            SearchSupported: true,
+            Parameters     : [
+                {
+                    $Type            : 'Common.ValueListParameterOut',
+                    LocalDataProperty: 'PRODUCT_NODE_KEY',
+                    ValueListProperty: 'NODE_KEY'
+                },
+                {
+                    $Type            : 'Common.ValueListParameterDisplayOnly',
+                    ValueListProperty: 'PRODUCT_ID'
+                },
+                {
+                    $Type            : 'Common.ValueListParameterDisplayOnly',
+                    ValueListProperty: 'DESCRIPTION'
+                }
+            ]
+        }})
     )
 };
