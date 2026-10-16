@@ -136,6 +136,27 @@ annotate service.PurchaseOrderSrv with @(
             Action: 'CatalogService.discount',
             Label : 'Discount 10%'
         },
+        // Create / Edit / Delete with icons from the SAP Icon Explorer
+        {
+            $Type  : 'UI.DataFieldForAction',
+            Action : 'CatalogService.createPurchaseOrder',
+            Label  : 'Create',
+            IconUrl: 'sap-icon://add'
+        },
+        {
+            $Type  : 'UI.DataFieldForAction',
+            Action : 'CatalogService.editPurchaseOrder',
+            Label  : 'Edit',
+            IconUrl: 'sap-icon://edit',
+            Inline : true
+        },
+        {
+            $Type  : 'UI.DataFieldForAction',
+            Action : 'CatalogService.deletePurchaseOrder',
+            Label  : 'Delete',
+            IconUrl: 'sap-icon://delete',
+            Inline : true
+        },
         {
             $Type: 'UI.DataField',
             Value: COMPANY_NAME
@@ -607,4 +628,27 @@ annotate service.EmployeeSrv with @(
 annotate service.CountriesSrv with {
     code        @title: 'Country Code';
     description @title: '{i18n>COUNTRY}';
+};
+
+// Create dialog: pick the business partner from a list, EUR as default currency
+annotate service.PurchaseOrderSrv with actions {
+    createPurchaseOrder(
+        BP_ID @(Common: {ValueList: {
+            Label          : 'Business Partner',
+            CollectionPath : 'BusinessPartnerSrv',
+            SearchSupported: true,
+            Parameters     : [
+                {
+                    $Type            : 'Common.ValueListParameterOut',
+                    LocalDataProperty: 'BP_ID',
+                    ValueListProperty: 'BP_ID'
+                },
+                {
+                    $Type            : 'Common.ValueListParameterDisplayOnly',
+                    ValueListProperty: 'COMPANY_NAME'
+                }
+            ]
+        }}),
+        CURRENCY_code @UI.ParameterDefaultValue: 'EUR'
+    )
 };

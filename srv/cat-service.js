@@ -15,7 +15,8 @@ export default cds.service.impl(async function () {
         PurchaseItemSrv
     } = this.entities;
 
-    const { PurchaseOrders } = cds.entities('poapplication.db.transaction');
+    const { PurchaseOrders, PurchaseItems } = cds.entities('poapplication.db.transaction');
+    const { BusinessPartners } = cds.entities('poapplication.db.master');
 
     // ==================================================
     // PURCHASE ITEM VALIDATION
@@ -591,6 +592,116 @@ export default cds.service.impl(async function () {
             .from(PurchaseOrderSrv)
             .orderBy('GROSS_AMOUNT desc')
             .limit(5);
+
+    });
+
+    // ==================================================
+    // CREATE / EDIT / DELETE PURCHASE ORDER (list report buttons)
+    // PurchaseOrderSrv is a read-only join view, so these actions
+    // write to the PurchaseOrders / PurchaseItems tables directly.
+    // ==================================================
+
+    const LIFECYCLE = ['N', 'S', 'C', 'X'];
+    const OVERALL   = ['N', 'P', 'D', 'R'];
+
+    const checkAmounts = (req, { GROSS_AMOUNT, NET_AMOUNT, TAX_AMOUNT }) => {
+        for (const [name, value] of Object.entries({ GROSS_AMOUNT, NET_AMOUNT, TAX_AMOUNT })) {
+            if (value !== undefined && value !== null && Number(value) < 0) {
+                req.reject(400, `${name} must not be negative`);
+            }
+        }
+    };
+
+    this.on('createPurchaseOrder', PurchaseOrderSrv, async (req) => {
+
+        const { BP_ID, GROSS_AMOUNT, NET_AMOUNT, TAX_AMOUNT, CURRENCY_code } = req.data;
+
+        checkAmounts(req, req.data);
+
+        const partner = await SELECT.one
+            .from(BusinessPartners)
+            .where({ BP_ID });
+
+        if (!partner) {
+            return req.reject(400, `Business partner ${BP_ID} not found`);
+        }
+
+        // Next purchase order number (300000000, 300000001, ...)
+        const last = await SELECT.one
+            .from(PurchaseOrders)
+            .columns('max(PO_ID) as maxId');
+
+        const NODE_KEY = randomUUID();
+        const PO_ID = String(Number(last?.maxId || 299999999) + 1);
+
+        await INSERT.into(PurchaseOrders).entries({
+            NODE_KEY,
+            PO_ID,
+            PARTNER_NODE_KEY: partner.NODE_KEY,
+            GROSS_AMOUNT,
+            NET_AMOUNT,
+            TAX_AMOUNT,
+            CURRENCY_code,
+            LIFECYCLE_STATUS: 'N',
+            OVERALL_STATUS: 'N'
+        });
+
+        return await SELECT.one
+            .from(PurchaseOrderSrv)
+            .where({ NODE_KEY });
+
+    });
+
+    this.on('editPurchaseOrder', PurchaseOrderSrv, async (req) => {
+
+        const key = req.params[0].NODE_KEY;
+        const { GROSS_AMOUNT, NET_AMOUNT, TAX_AMOUNT } = req.data;
+        const LIFECYCLE_STATUS = req.data.LIFECYCLE_STATUS?.toUpperCase() || undefined;
+        const OVERALL_STATUS = req.data.OVERALL_STATUS?.toUpperCase() || undefined;
+
+        checkAmounts(req, req.data);
+
+        if (LIFECYCLE_STATUS && !LIFECYCLE.includes(LIFECYCLE_STATUS)) {
+            return req.reject(400, `Life cycle status must be one of ${LIFECYCLE.join(', ')}`);
+        }
+
+        if (OVERALL_STATUS && !OVERALL.includes(OVERALL_STATUS)) {
+            return req.reject(400, `Overall status must be one of ${OVERALL.join(', ')}`);
+        }
+
+        // Only change what was filled in
+        const changes = Object.fromEntries(
+            Object.entries({ GROSS_AMOUNT, NET_AMOUNT, TAX_AMOUNT, LIFECYCLE_STATUS, OVERALL_STATUS })
+                .filter(([, value]) => value !== undefined && value !== null && value !== '')
+        );
+
+        const updated = await UPDATE(PurchaseOrders)
+            .set(changes)
+            .where({ NODE_KEY: key });
+
+        if (!updated) {
+            return req.reject(404, 'Purchase order not found');
+        }
+
+        return await SELECT.one
+            .from(PurchaseOrderSrv)
+            .where({ NODE_KEY: key });
+
+    });
+
+    this.on('deletePurchaseOrder', PurchaseOrderSrv, async (req) => {
+
+        const key = req.params[0].NODE_KEY;
+
+        await DELETE.from(PurchaseItems)
+            .where({ PARENT_NODE_KEY: key });
+
+        const deleted = await DELETE.from(PurchaseOrders)
+            .where({ NODE_KEY: key });
+
+        if (!deleted) {
+            return req.reject(404, 'Purchase order not found');
+        }
 
     });
 

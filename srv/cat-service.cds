@@ -194,6 +194,40 @@ service CatalogService {
                 TargetProperties: ['in/GROSS_AMOUNT', 'in/NET_AMOUNT', 'in/TAX_AMOUNT']
             }
             action   discount()      returns PurchaseOrderSrv;
+
+            // ---------- Create / Edit / Delete (list report buttons) ----------
+
+            // Create: toolbar button, bound to the whole list (no row needed)
+            @Common.SideEffects: {
+                TargetEntities: ['/CatalogService.EntityContainer/PurchaseOrderSrv']
+            }
+            action   createPurchaseOrder(
+                in            : many $self,
+                BP_ID         : String(36)     @title: '{i18n>BP_ID}'  @mandatory,
+                GROSS_AMOUNT  : common.AmountT @title: '{i18n>GROSS_AMOUNT}'  @mandatory,
+                NET_AMOUNT    : common.AmountT @title: '{i18n>NET_AMOUNT}'  @mandatory,
+                TAX_AMOUNT    : common.AmountT @title: '{i18n>TAX_AMOUNT}'  @mandatory,
+                CURRENCY_code : String(3)      @title: '{i18n>CURRENCY_CODE}'  @mandatory
+            ) returns PurchaseOrderSrv;
+
+            // Edit: row button, dialog pre-filled with the current amounts
+            @Common.SideEffects: {
+                TargetEntities: ['/CatalogService.EntityContainer/PurchaseOrderSrv']
+            }
+            action   editPurchaseOrder(
+                GROSS_AMOUNT     : common.AmountT @title: '{i18n>GROSS_AMOUNT}'  @UI.ParameterDefaultValue: in.GROSS_AMOUNT,
+                NET_AMOUNT       : common.AmountT @title: '{i18n>NET_AMOUNT}'    @UI.ParameterDefaultValue: in.NET_AMOUNT,
+                TAX_AMOUNT       : common.AmountT @title: '{i18n>TAX_AMOUNT}'    @UI.ParameterDefaultValue: in.TAX_AMOUNT,
+                LIFECYCLE_STATUS : String(1)      @title: 'Life Cycle Status (N / S / C / X)',
+                OVERALL_STATUS   : String(1)      @title: 'Overall Status (N / P / D / R)'
+            ) returns PurchaseOrderSrv;
+
+            // Delete: row button, asks for confirmation first
+            @Common.IsActionCritical: true
+            @Common.SideEffects: {
+                TargetEntities: ['/CatalogService.EntityContainer/PurchaseOrderSrv']
+            }
+            action   deletePurchaseOrder();
         };
 
     entity PurchaseItemSrv
