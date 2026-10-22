@@ -27,5 +27,16 @@
   ],
   "sapux": [
     "app/poapplication"
-  ]
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "cds": {
+    "requires": {
+      "[production]": {
+        "auth": "xsuaa"
+      },
+      "html5-repo": true
+    }
+  }
 }

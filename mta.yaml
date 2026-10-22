@@ -1,89 +1,165 @@
 _schema-version: 3.3.0
 ID: poapplication
-description: Welcome to your new CAP project.
+description: Purchase Order Application (CAP + SAP Fiori elements)
 version: 1.0.0
-modules:
-- name: poapplication-srv
-  type: nodejs
-  path: gen/srv
-  requires:
-  - name: poapplication-db
-  provides:
-  - name: srv-api
-    properties:
-      srv-url: ${default-url}
-  parameters:
-    buildpack: nodejs_buildpack
-    instances: 1
-  build-parameters:
-    builder: npm-ci
-- name: poapplication-db-deployer
-  type: hdb
-  path: gen/db
-  requires:
-  - name: poapplication-db
-  parameters:
-    buildpack: nodejs_buildpack
-- name: poapplication-app-content
-  type: com.sap.application.content
-  path: .
-  requires:
-  - name: poapplication-repo-host
-    parameters:
-      content-target: true
-  build-parameters:
-    build-result: resources
-    requires:
-    - artifacts:
-      - poapplication.zip
-      name: poapplication
-      target-path: resources/
-- name: poapplication
-  type: html5
-  path: app/poapplication
-  build-parameters:
-    build-result: dist
-    builder: custom
-    commands:
-    - npm install
-    - npm run build:cf
-    supported-platforms: []
-resources:
-- name: poapplication-db
-  type: com.sap.xs.hdi-container
-  parameters:
-    service: hana
-    service-plan: hdi-shared
-- name: poapplication-repo-host
-  type: org.cloudfoundry.managed-service
-  parameters:
-    service: html5-apps-repo
-    service-name: poapplication-html5-service
-    service-plan: app-host
-- name: poapplication-destination-service
-  type: org.cloudfoundry.managed-service
-  parameters:
-    config:
-      HTML5Runtime_enabled: false
-      init_data:
-        instance:
-          destinations:
-          - Authentication: NoAuthentication
-            Name: ui5
-            ProxyType: Internet
-            Type: HTTP
-            URL: https://ui5.sap.com
-          existing_destinations_policy: update
-      version: 1.0.0
-    service: destination
-    service-name: poapplication-destination-service
-    service-plan: lite
+
 parameters:
   deploy_mode: html5-repo
   enable-parallel-deployments: true
+
 build-parameters:
   before-all:
-  - builder: custom
-    commands:
-    - npm ci
-    - npx cds build --production
+    - builder: custom
+      commands:
+        - npm ci
+        - npx cds build --production
+
+modules:
+  # ---------------------------------------------------------------
+  # CAP service (srv/) - OData at /odata/v4/catalog
+  # ---------------------------------------------------------------
+  - name: poapplication-srv
+    type: nodejs
+    path: gen/srv
+    parameters:
+      buildpack: nodejs_buildpack
+      instances: 1
+      memory: 256M
+      disk-quota: 1024M
+    build-parameters:
+      builder: npm-ci
+    requires:
+      - name: poapplication-db
+      - name: poapplication-auth
+    provides:
+      - name: srv-api
+        properties:
+          srv-url: ${default-url}
+
+  # ---------------------------------------------------------------
+  # HANA deployer (db/) - tables, views and CSV data into HDI
+  # ---------------------------------------------------------------
+  - name: poapplication-db-deployer
+    type: hdb
+    path: gen/db
+    parameters:
+      buildpack: nodejs_buildpack
+    requires:
+      - name: poapplication-db
+
+  # ---------------------------------------------------------------
+  # Fiori app (app/poapplication) - built into poapplication.zip
+  # ---------------------------------------------------------------
+  - name: poapplication-ui
+    type: html5
+    path: app/poapplication
+    build-parameters:
+      build-result: dist
+      builder: custom
+      commands:
+        - npm install
+        - npm run build:cf
+      supported-platforms: []
+
+  # Uploads poapplication.zip to the HTML5 application repository
+  - name: poapplication-app-content
+    type: com.sap.application.content
+    path: .
+    requires:
+      - name: poapplication-repo-host
+        parameters:
+          content-target: true
+    build-parameters:
+      build-result: resources
+      requires:
+        - name: poapplication-ui
+          artifacts:
+            - poapplication.zip
+          target-path: resources/
+
+  # ---------------------------------------------------------------
+  # App router - the URL you open; handles login (XSUAA),
+  # serves the Fiori app and forwards /odata to the CAP service
+  # ---------------------------------------------------------------
+  - name: poapplication-router
+    type: approuter.nodejs
+    path: .deploy/app-router
+    parameters:
+      keep-existing-routes: true
+      memory: 256M
+      disk-quota: 256M
+    requires:
+      - name: srv-api
+        group: destinations
+        properties:
+          name: srv-api            # same name as in xs-app.json
+          url: ~{srv-url}
+          forwardAuthToken: true
+      - name: poapplication-auth
+      - name: poapplication-html5-runtime
+      - name: poapplication-destination-service
+    provides:
+      - name: app-api
+        properties:
+          app-protocol: ${protocol}
+          app-uri: ${default-uri}
+
+resources:
+  # HANA HDI container (same name as used by `cds deploy --to hana`)
+  - name: poapplication-db
+    type: com.sap.xs.hdi-container
+    parameters:
+      service: hana
+      service-plan: hdi-shared
+
+  # Login / tokens
+  - name: poapplication-auth
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: xsuaa
+      service-plan: application
+      path: ./xs-security.json
+      config:
+        xsappname: poapplication-${org}-${space}
+        tenant-mode: dedicated
+        oauth2-configuration:
+          credential-types:
+            - binding-secret
+            - x509
+          redirect-uris:
+            - https://*~{app-api/app-uri}/**
+    requires:
+      - name: app-api
+
+  # HTML5 application repository: storage (app-host) and runtime (app-runtime)
+  - name: poapplication-repo-host
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: html5-apps-repo
+      service-name: poapplication-html5-service
+      service-plan: app-host
+  - name: poapplication-html5-runtime
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: html5-apps-repo
+      service-plan: app-runtime
+
+  # Destination "ui5" used by the app's /resources route
+  - name: poapplication-destination-service
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: destination
+      service-name: poapplication-destination-service
+      service-plan: lite
+      config:
+        HTML5Runtime_enabled: false
+        version: 1.0.0
+        init_data:
+          instance:
+            existing_destinations_policy: update
+            destinations:
+              - Name: ui5
+                Type: HTTP
+                URL: https://ui5.sap.com
+                ProxyType: Internet
+                Authentication: NoAuthentication

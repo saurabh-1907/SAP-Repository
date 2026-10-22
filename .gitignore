@@ -21,3 +21,7 @@ mta_archives/
 # Local credentials (VCAP_SERVICES etc.) - never commit
 .env
 db/.env
+
+# MTA build output
+dist/
+resources/
